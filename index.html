@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Land Aggregation & Deal Ledger ERP</title>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -43,19 +41,19 @@
         .app-header {
             background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);
             color: #fff;
-            padding: 20px 24px;
+            padding: 16px 20px;
             border-radius: var(--radius-lg);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+            box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.2);
         }
 
-        .app-header h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px; }
-        .app-header p { font-size: 0.8rem; color: #94a3b8; margin-top: 2px; }
+        .app-header h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; }
+        .app-header p { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
 
         .sync-pill {
             display: inline-flex;
@@ -81,7 +79,59 @@
             justify-content: space-between;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+        }
+
+        /* 🔘 TAB NAVIGATION SYSTEM */
+        .tab-navigation {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 9px 16px;
+            border-radius: 8px 8px 0 0;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            color: var(--accent);
+            background: #fafcff;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(3px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .dashboard-grid {
@@ -92,9 +142,9 @@
         }
 
         @media (min-width: 768px) {
-            body { padding: 20px; max-width: 1420px; margin: 0 auto; }
+            body { padding: 18px; max-width: 1420px; margin: 0 auto; }
             .dashboard-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; }
-            .app-header h1 { font-size: 1.6rem; }
+            .app-header h1 { font-size: 1.5rem; }
         }
 
         .stat-card {
@@ -142,6 +192,8 @@
             border-bottom: 1px solid var(--border);
             padding-bottom: 12px;
             margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .panel-title { font-size: 14px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
@@ -205,7 +257,7 @@
 
         .btn:hover { opacity: 0.93; transform: translateY(-1px); }
         .btn-green { background: var(--success); }
-        .btn-sm { padding: 4px 8px; font-size: 11px; border-radius: 5px; }
+        .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
         .btn-danger { background: var(--danger); }
         .btn-warning { background: var(--warning); color: #fff; }
         .btn-purple { background: var(--purple); }
@@ -234,9 +286,6 @@
         }
 
         .badge-plot { background: var(--accent-soft); color: var(--accent); margin: 1px; }
-        .badge-mapi { background: #e0e7ff; color: #4338ca; }
-        .badge-comm { background: var(--warning-soft); color: var(--warning); }
-        .badge-legal { background: var(--purple-soft); color: var(--purple); }
 
         .modal {
             display: none;
@@ -255,20 +304,62 @@
             background: white;
             padding: 20px;
             border-radius: var(--radius-lg);
-            max-width: 720px;
+            max-width: 820px;
             width: 100%;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
         }
 
+        .doc-item-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        /* 🖨️ ROBUST PRINT SYSTEM */
+        #printMasterContainer {
+            display: none;
+        }
+
         @media print {
-            body * { visibility: hidden; }
-            #printableModalArea, #printableModalArea * { visibility: visible; }
-            #printableModalArea {
-                position: absolute;
-                left: 0; top: 0; width: 100%;
-                background: white; padding: 10px;
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            body > *:not(#printMasterContainer) {
+                display: none !important;
+            }
+            #printMasterContainer {
+                display: block !important;
+                width: 100% !important;
+                padding: 20px !important;
+                background: white !important;
+                color: #000 !important;
+            }
+            #printMasterContainer table {
+                width: 100% !important;
+                min-width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            #printMasterContainer table th, 
+            #printMasterContainer table td {
+                border: 1px solid #64748b !important;
+                padding: 8px !important;
+                font-size: 11pt !important;
+                color: #000 !important;
+            }
+            #printMasterContainer table th {
+                background-color: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             .no-print { display: none !important; }
         }
@@ -278,10 +369,17 @@
 
     <header class="app-header no-print">
         <div>
-            <h1>लैंड लेज़र & डीलिंग ERP</h1>
-            <p>रैयत खाता, प्लॉटवार खरीदार डील, कमीशन, नापी & लाइव पासबुक</p>
+            <h1>लैंड एग्रीगेशन & डील लेज़र ERP</h1>
+            <p>रैयत खाता, एग्रीमेंट तिजोरी, प्लॉट विभाजन & पासबुक सिस्टम</p>
         </div>
-        <div id="syncStatus" class="sync-pill">🔄 कनेक्ट हो रहा है...</div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-sm btn-ghost" style="color:white; border-color:rgba(255,255,255,0.3);" onclick="exportDataBackup()">📥 बैकअप (Export)</button>
+            <label class="btn btn-sm btn-ghost" style="color:white; border-color:rgba(255,255,255,0.3); cursor:pointer;">
+                📤 अपलोड (Import)
+                <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importDataBackup(event)">
+            </label>
+            <div id="syncStatus" class="sync-pill">🔄 कनेक्ट हो रहा है...</div>
+        </div>
     </header>
 
     <div class="project-bar no-print">
@@ -290,13 +388,361 @@
             <select id="activeProjectSelect" onchange="switchProject()"></select>
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top: auto;">
-            <button class="btn btn-warning btn-sm" onclick="openEditCurrentProject()">✏️ एडिट</button>
+            <button class="btn btn-warning btn-sm" onclick="openEditCurrentProject()">✏️ प्रोजेक्ट एडिट</button>
             <button class="btn btn-sm" onclick="openNewProjectPanel()">+ नया प्रोजेक्ट</button>
             <button class="btn btn-danger btn-sm" onclick="deleteCurrentProject()">🗑️ हटाएं</button>
         </div>
     </div>
 
-    <!-- Project Edit / Add Panel -->
+    <div class="tab-navigation no-print">
+        <button class="tab-btn active" onclick="switchSection('tabDashboard', this)">📊 डैशबोर्ड & समरी</button>
+        <button class="tab-btn" onclick="switchSection('tabPlotReport', this)">🔍 प्लॉट-वार रिपोर्ट</button>
+        <button class="tab-btn" onclick="switchSection('tabRaiyat', this)">🌾 1. रैयत (विक्रेता) लेज़र</button>
+        <button class="tab-btn" onclick="switchSection('tabParty', this)">🏢 2. पार्टी (खरीदार) लेज़र</button>
+        <button class="tab-btn" onclick="switchSection('tabExpenses', this)">💸 3. खर्चे & कमीशन</button>
+        <button class="tab-btn" onclick="switchSection('tabDocsVault', this)">📁 4. एग्रीमेंट / दस्तावेज तिजोरी</button>
+    </div>
+
+    <div id="tabDashboard" class="tab-content active no-print">
+        <section class="dashboard-grid">
+            <div class="stat-card">
+                <span class="stat-label">कुल रकबा (Acquired)</span>
+                <span class="stat-value" id="dashAcquired">0 डिसमिल</span>
+            </div>
+            <div class="stat-card green">
+                <span class="stat-label">पार्टी से कुल प्राप्त</span>
+                <span class="stat-value" id="dashTotalReceived" style="color:var(--success);">₹0</span>
+            </div>
+            <div class="stat-card orange">
+                <span class="stat-label">रैयतों को दिया गया</span>
+                <span class="stat-value" id="dashRaiyatPaid" style="color:var(--warning);">₹0</span>
+            </div>
+            <div class="stat-card purple">
+                <span class="stat-label">कमीशन & नापी खर्च</span>
+                <span class="stat-value" id="dashTotalExpenses" style="color:var(--purple);">₹0</span>
+            </div>
+            <div class="stat-card red">
+                <span class="stat-label">रैयतों का शेष बकाया</span>
+                <span class="stat-value" id="dashRaiyatDue" style="color:var(--danger);">₹0</span>
+            </div>
+            <div class="stat-card green">
+                <span class="stat-label">पार्टी से शेष बाकी</span>
+                <span class="stat-value" id="dashPartyStatus" style="color:var(--success);">₹0</span>
+            </div>
+        </section>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📌 प्रोजेक्ट का संक्षिप्त हाल</span>
+                <button class="btn btn-purple btn-sm" onclick="printFullProjectSummary()">🖨️ संपूर्ण प्रोजेक्ट रिपोर्ट PDF</button>
+            </div>
+            <p style="font-size:13px; color:var(--text-muted); line-height: 1.6;">
+                ऊपर दिए गए टैब्स का इस्तेमाल करके आप रैयत, खरीदार, खर्चे और उनके एग्रीमेंट पेपर्स को अलग-अलग आसानी से मैनेज कर सकते हैं।
+            </p>
+        </div>
+    </div>
+
+    <div id="tabPlotReport" class="tab-content no-print">
+        <section class="panel" style="border: 2px solid var(--accent); background: #f8faff;">
+            <div class="panel-header">
+                <span class="panel-title" style="color:var(--accent);">🔍 प्लॉट नंबर वाइज सभी रैयत & खरीदार ब्योरा</span>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-purple btn-sm" onclick="printPlotReport()">📄 इस प्लॉट की PDF / Print लें</button>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+                <div class="form-group" style="min-width: 220px;">
+                    <label style="font-weight: 700; color: var(--accent);">👉 प्लॉट नंबर चुनें:</label>
+                    <select id="plotFilterSelect" onchange="onPlotFilterChanged()">
+                        <option value="">-- कोई प्लॉट चुनें --</option>
+                    </select>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); padding-bottom: 8px;">
+                    (प्लॉट चुनते ही इस प्लॉट के सभी रैयत, हिस्सा, खरीदार और बकाया अलग-अलग दिखेंगे)
+                </div>
+            </div>
+
+            <div id="plotReportView" style="margin-top: 14px; display: none;">
+                <div style="border-bottom: 2px solid #334155; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 style="font-size: 18px; color: var(--primary);" id="repPlotHeading">प्लॉट विवरण</h2>
+                        <p style="font-size: 12px; color: #64748b;" id="repProjectHeading">प्रोजेक्ट: -</p>
+                    </div>
+                    <div style="text-align: right; font-size: 12px; font-weight: bold; color: var(--accent);" id="repPlotSummaryMeta"></div>
+                </div>
+
+                <h4 style="font-size: 13px; color: var(--primary); margin-bottom: 6px;">1. इस प्लॉट के सभी रैयत (खाताधारक/विक्रेता):</h4>
+                <div class="table-wrap" style="margin-bottom: 14px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>क्र.</th>
+                                <th>खाता नं.</th>
+                                <th>रैयत का नाम</th>
+                                <th>हिस्सा (डिसमिल)</th>
+                                <th>तय रेट (₹)</th>
+                                <th>कुल तय रकम (₹)</th>
+                                <th>प्राप्त/दिया भुगतान (₹)</th>
+                                <th>शेष बकाया (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plotRaiyatReportBody"></tbody>
+                    </table>
+                </div>
+
+                <h4 style="font-size: 13px; color: var(--primary); margin-bottom: 6px;">2. इस प्लॉट के खरीदार (पार्टी/ग्राहक):</h4>
+                <div class="table-wrap" style="margin-bottom: 14px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>पार्टी का नाम</th>
+                                <th>खरीदा रकबा (डिसमिल)</th>
+                                <th>तय रेट (₹)</th>
+                                <th>कुल तय मूल्य (₹)</th>
+                                <th>प्राप्त भुगतान (₹)</th>
+                                <th>शेष बकाया (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plotPartyReportBody"></tbody>
+                    </table>
+                </div>
+
+                <div style="background:#f1f5f9; padding:12px; border-radius:8px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12.5px; border:1px solid var(--border);">
+                    <div><b>रैयतों को कुल देना:</b> ₹<span id="repRaiyatTotal">0</span> | <b>दिया:</b> ₹<span id="repRaiyatPaid">0</span> | <b style="color:var(--danger)">बकाया:</b> ₹<span id="repRaiyatDue">0</span></div>
+                    <div><b>पार्टी से कुल लेना:</b> ₹<span id="repPartyTotal">0</span> | <b>प्राप्त:</b> ₹<span id="repPartyRecv">0</span> | <b style="color:var(--success)">शेष बाकी:</b> ₹<span id="repPartyDue">0</span></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="tabRaiyat" class="tab-content no-print">
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🌾 1. रैयत (खाताधारक/विक्रेता) नया जोड़ें</span>
+                <button class="btn btn-purple btn-sm" onclick="printFullList('raiyat')">🖨️ सभी रैयतों की लिस्ट PDF</button>
+            </div>
+            <form id="raiyatForm">
+                <input type="hidden" id="editRaiyatIndex" value="-1">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>तारीख (Date)</label>
+                        <input type="date" id="rDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>खाता संख्या</label>
+                        <input type="text" id="rKhata" required placeholder="उदा. खाता 54">
+                    </div>
+                    <div class="form-group">
+                        <label>प्लॉट / खेसरा संख्या</label>
+                        <input type="text" id="rPlot" required placeholder="उदा. 312">
+                    </div>
+                    <div class="form-group">
+                        <label>रैयत का नाम</label>
+                        <input type="text" id="rName" required placeholder="उदा. सुरेश यादव">
+                    </div>
+                    <div class="form-group">
+                        <label>हिस्सा (डिसमिल)</label>
+                        <input type="number" id="rArea" step="any" required placeholder="25">
+                    </div>
+                    <div class="form-group">
+                        <label>रेट (प्रति डिसमिल)</label>
+                        <input type="number" id="rRate" step="any" required placeholder="₹ 35000">
+                    </div>
+                    <div class="form-group">
+                        <label>शुरुआती टोकन (स्वयं दिया)</label>
+                        <input type="number" id="rPaid" step="any" value="0">
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button type="submit" class="btn" id="raiyatSubmitBtn">+ रैयत जोड़ें</button>
+                    <button type="button" class="btn btn-warning" id="cancelRaiyatEdit" style="display:none;" onclick="resetRaiyatForm()">रद्द करें</button>
+                </div>
+            </form>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>क्र.</th>
+                            <th>तारीख</th>
+                            <th>खाता</th>
+                            <th>प्लॉट</th>
+                            <th>रैयत नाम</th>
+                            <th>रकबा</th>
+                            <th>कुल रकम</th>
+                            <th>दिया भुगतान</th>
+                            <th>शेष बाकी</th>
+                            <th>पासबुक & एग्रीमेंट</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="raiyatTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="tabParty" class="tab-content no-print">
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">🏢 2. पार्टी (खरीदार) - अलग-अलग प्लॉट व अलग रेट जोड़ें</span>
+                <button class="btn btn-purple btn-sm" onclick="printFullList('party')">🖨️ सभी पार्टियों की लिस्ट PDF</button>
+            </div>
+            <form id="partyForm">
+                <input type="hidden" id="editPartyIndex" value="-1">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>तारीख (Date)</label>
+                        <input type="date" id="pDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>पार्टी का नाम</label>
+                        <input type="text" id="pName" required placeholder="उदा. राज बिल्डर्स">
+                    </div>
+                    <div class="form-group">
+                        <label>शुरुआती एडवांस</label>
+                        <input type="number" id="pReceived" step="any" value="0">
+                    </div>
+                </div>
+
+                <div style="background:var(--surface-subtle); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <label style="font-size:12px; font-weight:700; color:var(--primary);">खरीदे गए प्लॉट, रकबा & उनके अलग-अलग रेट:</label>
+                        <button type="button" class="btn btn-sm" onclick="addPartyPlotRow()">+ और प्लॉट जोड़ें</button>
+                    </div>
+                    <div id="partyPlotsContainer"></div>
+                    <div style="font-size:12px; font-weight:700; color:var(--accent); text-align:right; margin-top:6px;">
+                        कुल रकबा: <span id="partyLiveArea">0</span> डिसमिल | कुल तय मूल्य: ₹<span id="partyLiveTotal">0</span>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                    <button type="submit" class="btn btn-green" id="partySubmitBtn">+ पार्टी सुरक्षित करें</button>
+                    <button type="button" class="btn btn-warning" id="cancelPartyEdit" style="display:none;" onclick="resetPartyForm()">रद्द करें</button>
+                </div>
+            </form>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>तारीख</th>
+                            <th>पार्टी नाम</th>
+                            <th>प्लॉट, रकबा & रेट</th>
+                            <th>कुल रकबा</th>
+                            <th>कुल तय मूल्य</th>
+                            <th>कुल प्राप्त</th>
+                            <th>शेष बाकी</th>
+                            <th>पासबुक</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="partyTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="tabExpenses" class="tab-content no-print">
+        <section class="panel" style="border-top: 3px solid var(--purple);">
+            <div class="panel-header">
+                <span class="panel-title" style="color:var(--purple);">💸 3. अन्य खर्चे (दलाली / कमीशन, नापी / अमीन खर्च, कानूनी व फील्ड)</span>
+            </div>
+            <form id="expenseForm">
+                <input type="hidden" id="editExpenseIndex" value="-1">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>तारीख (Date)</label>
+                        <input type="date" id="eDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>खर्च का प्रकार (Category)</label>
+                        <select id="eCategory" required>
+                            <option value="दलाली / कमीशन">🤝 दलाली / कमीशन (Commission)</option>
+                            <option value="नापी / अमीन खर्च">📐 नापी / अमीन खर्च (Mapi/Survey)</option>
+                            <option value="रजिस्ट्री / एग्रीमेंट">📜 रजिस्ट्री / एग्रीमेंट (Legal)</option>
+                            <option value="पेट्रोल / फील्ड / खाना">⛽ पेट्रोल / फील्ड / खाना</option>
+                            <option value="अन्य खर्च">📦 अन्य मिसलेनियस खर्च</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>भुगतान प्राप्तकर्ता (व्यक्ति का नाम)</label>
+                        <input type="text" id="ePerson" required placeholder="उदा. अमीन साहब / ब्रोकर रमेश">
+                    </div>
+                    <div class="form-group">
+                        <label>रकम (₹ Amount)</label>
+                        <input type="number" id="eAmount" step="any" required placeholder="₹">
+                    </div>
+                    <div class="form-group">
+                        <label>माध्यम (Payment Mode)</label>
+                        <select id="eMode">
+                            <option value="Cash">Cash (नकद)</option>
+                            <option value="Online / UPI">Online / UPI</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>विवरण (Remarks / Note)</label>
+                        <input type="text" id="eRemark" placeholder="उदा. प्लॉट 312 की सीमांकन नापी">
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button type="submit" class="btn btn-purple" id="expenseSubmitBtn">+ खर्च दर्ज करें</button>
+                    <button type="button" class="btn btn-warning" id="cancelExpenseEdit" style="display:none;" onclick="resetExpenseForm()">रद्द करें</button>
+                </div>
+            </form>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>क्र.</th>
+                            <th>तारीख</th>
+                            <th>श्रेणी</th>
+                            <th>प्राप्तकर्ता</th>
+                            <th>रकम (₹)</th>
+                            <th>माध्यम</th>
+                            <th>विवरण</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenseTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="tabDocsVault" class="tab-content no-print">
+        <section class="panel" style="border: 2px solid var(--success);">
+            <div class="panel-header">
+                <span class="panel-title" style="color:var(--success);">📁 4. सभी रैयतों के एग्रीमेंट, रजिस्ट्री व दस्तावेज तिजोरी</span>
+                <span style="font-size:12px; color:var(--text-muted);">IndexedDB Safe Storage (Zero Error Upload)</span>
+            </div>
+
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:14px; border-radius:8px; margin-bottom:14px;">
+                <h4 style="font-size:12.5px; font-weight:700; color:var(--success); margin-bottom:8px;">+ नया दस्तावेज / एग्रीमेंट डायरेक्ट अपलोड करें:</h4>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>रैयत चुनें:</label>
+                        <select id="vaultRaiyatSelect"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>दस्तावेज का शीर्षक (Title)</label>
+                        <input type="text" id="vaultDocTitle" placeholder="उदा. एग्रीमेंट पेपर / रजिस्ट्री कॉपी / रसीद">
+                    </div>
+                    <div class="form-group">
+                        <label>फाइल / फोटो चुनें (PDF या Image):</label>
+                        <input type="file" id="vaultDocFile" accept="image/*,.pdf">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-green btn-sm" onclick="uploadDirectVaultDoc()">📤 दस्तावेज सुरक्षित करें</button>
+            </div>
+
+            <div id="allRaiyatsDocsList"></div>
+        </section>
+    </div>
+
     <div class="panel no-print" id="projectPanel" style="display:none; background: #eff6ff; border: 1px solid #bfdbfe;">
         <div class="panel-header">
             <span class="panel-title" id="projectPanelTitle">नया प्रोजेक्ट सेटअप & नक्शा</span>
@@ -333,241 +779,9 @@
         </form>
     </div>
 
-    <!-- Active Map Display -->
-    <div class="panel no-print" id="activeMapPanel" style="display:none;">
-        <div class="panel-header">
-            <span class="panel-title">🗺️ प्रोजेक्ट मास्टर नक्शा / लेआउट</span>
-        </div>
-        <div style="text-align: center; background:#f8fafc; padding:12px; border-radius:8px; border:2px dashed var(--border);">
-            <img id="activeMapDisplay" style="max-width:100%; max-height:280px; border-radius:6px; object-fit:contain;" src="" alt="नक्शा">
-        </div>
-    </div>
-
-    <!-- Dashboard KPI -->
-    <section class="dashboard-grid no-print">
-        <div class="stat-card">
-            <span class="stat-label">कुल रकबा</span>
-            <span class="stat-value" id="dashAcquired">0 डिसमिल</span>
-        </div>
-        <div class="stat-card green">
-            <span class="stat-label">पार्टी से कुल प्राप्त</span>
-            <span class="stat-value" id="dashTotalReceived" style="color:var(--success);">₹0</span>
-        </div>
-        <div class="stat-card orange">
-            <span class="stat-label">रैयतों को दिया गया</span>
-            <span class="stat-value" id="dashRaiyatPaid" style="color:var(--warning);">₹0</span>
-        </div>
-        <div class="stat-card purple">
-            <span class="stat-label">कमीशन & नापी खर्च</span>
-            <span class="stat-value" id="dashTotalExpenses" style="color:var(--purple);">₹0</span>
-        </div>
-        <div class="stat-card red">
-            <span class="stat-label">रैयतों का बकाया</span>
-            <span class="stat-value" id="dashRaiyatDue" style="color:var(--danger);">₹0</span>
-        </div>
-        <div class="stat-card green">
-            <span class="stat-label">पार्टी से शेष बाकी</span>
-            <span class="stat-value" id="dashPartyStatus" style="color:var(--success);">₹0</span>
-        </div>
-    </section>
-
-    <!-- 1. Raiyat (Seller) Panel -->
-    <section class="panel no-print">
-        <div class="panel-header">
-            <span class="panel-title">1. रैयत (खाताधारक/विक्रेता) जोड़ें</span>
-        </div>
-        <form id="raiyatForm">
-            <input type="hidden" id="editRaiyatIndex" value="-1">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>तारीख (Date)</label>
-                    <input type="date" id="rDate" required>
-                </div>
-                <div class="form-group">
-                    <label>खाता संख्या</label>
-                    <input type="text" id="rKhata" required placeholder="उदा. खाता 54">
-                </div>
-                <div class="form-group">
-                    <label>प्लॉट / खेसरा संख्या</label>
-                    <input type="text" id="rPlot" required placeholder="उदा. प्लॉट 312">
-                </div>
-                <div class="form-group">
-                    <label>रैयत का नाम</label>
-                    <input type="text" id="rName" required placeholder="उदा. सुरेश यादव">
-                </div>
-                <div class="form-group">
-                    <label>हिस्सा (डिसमिल)</label>
-                    <input type="number" id="rArea" step="any" required placeholder="25">
-                </div>
-                <div class="form-group">
-                    <label>रेट (प्रति डिसमिल)</label>
-                    <input type="number" id="rRate" step="any" required placeholder="₹ 35000">
-                </div>
-                <div class="form-group">
-                    <label>शुरुआती टोकन (स्वयं दिया)</label>
-                    <input type="number" id="rPaid" step="any" value="0">
-                </div>
-            </div>
-            <div style="display:flex; gap:8px;">
-                <button type="submit" class="btn" id="raiyatSubmitBtn">+ रैयत जोड़ें</button>
-                <button type="button" class="btn btn-warning" id="cancelRaiyatEdit" style="display:none;" onclick="resetRaiyatForm()">रद्द करें</button>
-            </div>
-        </form>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>क्र.</th>
-                        <th>तारीख</th>
-                        <th>खाता</th>
-                        <th>प्लॉट</th>
-                        <th>रैयत नाम</th>
-                        <th>रकबा</th>
-                        <th>कुल रकम</th>
-                        <th>प्राप्त भुगतान</th>
-                        <th>शेष बाकी</th>
-                        <th>पासबुक</th>
-                        <th>एक्शन</th>
-                    </tr>
-                </thead>
-                <tbody id="raiyatTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- 2. Buyer (Party) Panel -->
-    <section class="panel no-print">
-        <div class="panel-header">
-            <span class="panel-title">2. पार्टी (खरीदार) - अलग-अलग प्लॉट व अलग रेट जोड़ें</span>
-        </div>
-        <form id="partyForm">
-            <input type="hidden" id="editPartyIndex" value="-1">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>तारीख (Date)</label>
-                    <input type="date" id="pDate" required>
-                </div>
-                <div class="form-group">
-                    <label>पार्टी का नाम</label>
-                    <input type="text" id="pName" required placeholder="उदा. राज बिल्डर्स">
-                </div>
-                <div class="form-group">
-                    <label>शुरुआती एडवांस</label>
-                    <input type="number" id="pReceived" step="any" value="0">
-                </div>
-            </div>
-
-            <!-- Plot Multi-Rate Row -->
-            <div style="background:var(--surface-subtle); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--border);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <label style="font-size:12px; font-weight:700; color:var(--primary);">खरीदे गए प्लॉट, रकबा & उनके अलग-अलग रेट:</label>
-                    <button type="button" class="btn btn-sm" onclick="addPartyPlotRow()">+ और प्लॉट जोड़ें</button>
-                </div>
-                <div id="partyPlotsContainer"></div>
-                <div style="font-size:12px; font-weight:700; color:var(--accent); text-align:right; margin-top:6px;">
-                    कुल रकबा: <span id="partyLiveArea">0</span> डिसमिल | कुल तय मूल्य: ₹<span id="partyLiveTotal">0</span>
-                </div>
-            </div>
-
-            <div style="display:flex; gap:8px;">
-                <button type="submit" class="btn btn-green" id="partySubmitBtn">+ पार्टी सुरक्षित करें</button>
-                <button type="button" class="btn btn-warning" id="cancelPartyEdit" style="display:none;" onclick="resetPartyForm()">रद्द करें</button>
-            </div>
-        </form>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>तारीख</th>
-                        <th>पार्टी नाम</th>
-                        <th>प्लॉट, रकबा & रेट</th>
-                        <th>कुल रकबा</th>
-                        <th>कुल तय मूल्य</th>
-                        <th>कुल प्राप्त</th>
-                        <th>शेष बाकी</th>
-                        <th>पासबुक</th>
-                        <th>एक्शन</th>
-                    </tr>
-                </thead>
-                <tbody id="partyTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- 3. Expenses (Commission, Mapi, Legal) Panel -->
-    <section class="panel no-print" style="border-top: 3px solid var(--purple);">
-        <div class="panel-header">
-            <span class="panel-title" style="color:var(--purple);">3. अन्य खर्चे (दलाली / कमीशन, नापी / अमीन खर्च, रजिस्ट्री व फील्ड)</span>
-        </div>
-        <form id="expenseForm">
-            <input type="hidden" id="editExpenseIndex" value="-1">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>तारीख (Date)</label>
-                    <input type="date" id="eDate" required>
-                </div>
-                <div class="form-group">
-                    <label>खर्च का प्रकार (Category)</label>
-                    <select id="eCategory" required>
-                        <option value="दलाली / कमीशन">🤝 दलाली / कमीशन (Commission)</option>
-                        <option value="नापी / अमीन खर्च">📐 नापी / अमीन खर्च (Mapi/Survey)</option>
-                        <option value="रजिस्ट्री / एग्रीमेंट">📜 रजिस्ट्री / एग्रीमेंट (Legal)</option>
-                        <option value="पेट्रोल / फील्ड / खाना">⛽ पेट्रोल / फील्ड / खाना</option>
-                        <option value="अन्य खर्च">📦 अन्य मिसलेनियस खर्च</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>भुगतान प्राप्तकर्ता (व्यक्ति का नाम)</label>
-                    <input type="text" id="ePerson" required placeholder="उदा. अमीन साहब / ब्रोकर रमेश">
-                </div>
-                <div class="form-group">
-                    <label>रकम (₹ Amount)</label>
-                    <input type="number" id="eAmount" step="any" required placeholder="₹">
-                </div>
-                <div class="form-group">
-                    <label>माध्यम (Payment Mode)</label>
-                    <select id="eMode">
-                        <option value="Cash">Cash (नकद)</option>
-                        <option value="Online / UPI">Online / UPI</option>
-                        <option value="Cheque">Cheque</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>विवरण (Remarks / Note)</label>
-                    <input type="text" id="eRemark" placeholder="उदा. प्लॉट 312 की सीमांकन नापी">
-                </div>
-            </div>
-            <div style="display:flex; gap:8px;">
-                <button type="submit" class="btn btn-purple" id="expenseSubmitBtn">+ खर्च दर्ज करें</button>
-                <button type="button" class="btn btn-warning" id="cancelExpenseEdit" style="display:none;" onclick="resetExpenseForm()">रद्द करें</button>
-            </div>
-        </form>
-
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th>क्र.</th>
-                        <th>तारीख</th>
-                        <th>श्रेणी</th>
-                        <th>प्राप्तकर्ता</th>
-                        <th>रकम (₹)</th>
-                        <th>माध्यम</th>
-                        <th>विवरण</th>
-                        <th>एक्शन</th>
-                    </tr>
-                </thead>
-                <tbody id="expenseTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Passbook & Statement Modal -->
     <div class="modal" id="passbookModal">
-        <div class="modal-content" id="printableModalArea">
-            <div class="modal-header">
+        <div class="modal-content" id="passbookModalContent">
+            <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
                 <div>
                     <h3 id="modalPersonName" style="color:var(--primary); font-size:16px; font-weight:800;">नाम</h3>
                     <div id="modalPersonMeta" style="font-size:11px; color:#64748b; margin-top:3px;"></div>
@@ -611,9 +825,19 @@
                 </div>
             </div>
 
+            <div class="no-print" id="docUploadSection" style="background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px; margin-bottom:12px;">
+                <h4 style="font-size:12px; font-weight:700; color:var(--success); margin-bottom:6px;">📁 रैयत एग्रीमेंट / रजिस्ट्री दस्तावेज जोड़ें:</h4>
+                <div style="display:grid; grid-template-columns:1fr 1.5fr auto; gap:8px; align-items:center;">
+                    <input type="text" id="docTitleInput" placeholder="दस्तावेज का नाम (उदा. एग्रीमेंट पेपर)" style="padding:7px; font-size:12px; border:1px solid var(--border); border-radius:6px;">
+                    <input type="file" id="docFileInput" accept="image/*,.pdf" style="font-size:11px;">
+                    <button type="button" class="btn btn-green btn-sm" onclick="uploadModalRaiyatDoc()">+ अपलोड करें</button>
+                </div>
+                <div id="raiyatDocsContainer" style="margin-top:10px;"></div>
+            </div>
+
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                 <h4 style="font-size:12px; font-weight:700;">लेन-देन इतिहास:</h4>
-                <span class="badge" style="background:#e2e8f0; color:#475569;">📅 Date Wise (Old ➔ New)</span>
+                <span class="badge" style="background:#e2e8f0; color:#475569;">📅 Date Wise</span>
             </div>
 
             <div class="table-wrap">
@@ -648,14 +872,72 @@
             </div>
 
             <div style="text-align:right; margin-top:12px;" class="no-print">
-                <button class="btn btn-purple btn-sm" onclick="window.print()">🖨️ रसीद / पासबुक प्रिंट करें</button>
+                <button class="btn btn-purple btn-sm" onclick="printSinglePassbook()">🖨️ रसीद / पासबुक प्रिंट (PDF)</button>
             </div>
         </div>
     </div>
 
-    <!-- App JavaScript Logic with AUTO-RECOVERY -->
+    <div id="printMasterContainer">
+        <div id="printMasterContent"></div>
+    </div>
+
     <script>
-        // 1. AUTO DATA RECOVERY FROM ALL PREVIOUS LOCALSTORAGE KEYS
+        // 🗄️ INDEXED-DB ENGINE FOR UNLIMITED FAIL-PROOF FILE STORAGE
+        let idb = null;
+        function initIndexedDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open('LandLedgerDocStore', 1);
+                req.onupgradeneeded = function(e) {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('documents')) {
+                        db.createObjectStore('documents', { keyPath: 'id' });
+                    }
+                };
+                req.onsuccess = function(e) {
+                    idb = e.target.result;
+                    resolve(idb);
+                };
+                req.onerror = function(e) {
+                    console.error("IndexedDB Error:", e);
+                    reject(e);
+                };
+            });
+        }
+
+        function saveDocBlob(id, fileBlob, fileName, fileType) {
+            return new Promise((resolve, reject) => {
+                if (!idb) return reject("IndexedDB not ready");
+                const tx = idb.transaction('documents', 'readwrite');
+                const store = tx.objectStore('documents');
+                store.put({ id, fileBlob, fileName, fileType });
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = (e) => reject(e);
+            });
+        }
+
+        function getDocBlob(id) {
+            return new Promise((resolve, reject) => {
+                if (!idb) return reject("IndexedDB not ready");
+                const tx = idb.transaction('documents', 'readonly');
+                const store = tx.objectStore('documents');
+                const req = store.get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = (e) => reject(e);
+            });
+        }
+
+        function deleteDocBlob(id) {
+            return new Promise((resolve, reject) => {
+                if (!idb) return resolve(true);
+                const tx = idb.transaction('documents', 'readwrite');
+                const store = tx.objectStore('documents');
+                store.delete(id);
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = (e) => reject(e);
+            });
+        }
+
+        // Local Storage Master Recovery
         function recoverMasterDatabase() {
             const possibleKeys = [
                 'land_app_cloud_db_v8',
@@ -692,19 +974,7 @@
 
             if (!bestDb) {
                 bestDb = {
-                    projects: [
-                        {
-                            id: 'proj_1',
-                            name: 'रामपुर एग्रीगेशन फेज-1',
-                            mauja: 'रामपुर',
-                            maujaNo: 'थाना 142',
-                            targetAcre: 20,
-                            mapImage: '',
-                            raiyats: [],
-                            parties: [],
-                            expenses: []
-                        }
-                    ],
+                    projects: [{ id: 'proj_1', name: 'रामपुर एग्रीगेशन', mauja: 'रामपुर', maujaNo: '', targetAcre: 20, mapImage: '', raiyats: [], parties: [], expenses: [] }],
                     currentProjectId: 'proj_1'
                 };
             }
@@ -713,7 +983,7 @@
 
         let db = recoverMasterDatabase();
 
-        // 2. FIREBASE SETUP
+        // Firebase Initialization
         const firebaseConfig = {
             apiKey: "AIzaSyCPJUS6lu6dTkepxVprhkfvY_N2A8m3oSI",
             authDomain: "dealing-dd999.firebaseapp.com",
@@ -736,7 +1006,7 @@
             document.getElementById('syncStatus').style.color = '#10b981';
         } catch (e) {
             console.warn("Firebase fallback", e);
-            document.getElementById('syncStatus').innerText = '🟡 Local Storage Mode';
+            document.getElementById('syncStatus').innerText = '🟡 Local Mode Active';
         }
 
         const todayStr = new Date().toISOString().split('T')[0];
@@ -746,7 +1016,19 @@
 
         let currentModalContext = { type: '', index: -1 };
 
-        // Realtime sync with conflict protection
+        // TAB SWITCHING FUNCTION
+        function switchSection(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tabDocsVault') {
+                renderVaultSection();
+            }
+        }
+
         if (isCloudAvailable) {
             dbFirestore.collection('land_data').doc('master_ledger').onSnapshot(doc => {
                 if (doc.exists) {
@@ -764,30 +1046,61 @@
                         });
                     }
 
-                    // Never overwrite populated local data with empty cloud data
                     if (cloudCount >= localCount && cloudCount > 0) {
                         db = cloudData;
                         saveLocalOnly();
                         renderAll();
                     } else if (localCount > 0 && cloudCount === 0) {
-                        saveDB(); // push recovered local data to cloud
+                        saveDB();
                     }
                 } else {
                     saveDB();
                 }
-            }, err => console.error("Firestore Error:", err));
+            }, err => {
+                console.error("Firestore Error:", err);
+            });
         }
 
-        function saveLocalOnly() {
-            localStorage.setItem('land_app_cloud_db_v8', JSON.stringify(db));
-        }
+        function saveLocalOnly() { localStorage.setItem('land_app_cloud_db_v8', JSON.stringify(db)); }
 
         function saveDB() {
             saveLocalOnly();
             if (isCloudAvailable) {
-                dbFirestore.collection('land_data').doc('master_ledger').set(db).catch(err => console.error("Cloud Save error:", err));
+                dbFirestore.collection('land_data').doc('master_ledger').set(db).catch(err => {
+                    console.error("Cloud Save error:", err);
+                });
             }
             renderAll();
+        }
+
+        // Export / Import
+        function exportDataBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Land_Ledger_Backup_${todayStr}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importDataBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && imported.projects) {
+                        db = imported;
+                        saveDB();
+                        alert('डेटा सफलतापूर्वक इम्पोर्ट हो गया!');
+                    }
+                } catch(err) {
+                    alert('गलत फाइल फॉर्मेट!');
+                }
+            };
+            reader.readAsText(file);
         }
 
         function getCurrentProject() {
@@ -800,7 +1113,7 @@
             return p;
         }
 
-        // Project Logic
+        // Project Handlers
         function openNewProjectPanel() {
             document.getElementById('editProjId').value = '';
             document.getElementById('existingProjMap').value = '';
@@ -825,9 +1138,7 @@
             document.getElementById('projectPanel').style.display = 'block';
         }
 
-        function closeProjectPanel() {
-            document.getElementById('projectPanel').style.display = 'none';
-        }
+        function closeProjectPanel() { document.getElementById('projectPanel').style.display = 'none'; }
 
         document.getElementById('projectForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -892,7 +1203,7 @@
             }
         }
 
-        // Raiyat Form
+        // Raiyat Management
         document.getElementById('raiyatForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const proj = getCurrentProject();
@@ -908,6 +1219,7 @@
                 name: document.getElementById('rName').value.trim(),
                 area: parseFloat(document.getElementById('rArea').value),
                 rate: parseFloat(document.getElementById('rRate').value),
+                documents: editIndex === -1 ? [] : (proj.raiyats[editIndex].documents || []),
                 transactions: []
             };
 
@@ -957,16 +1269,215 @@
 
             document.getElementById('raiyatSubmitBtn').innerText = "अपडेट करें";
             document.getElementById('cancelRaiyatEdit').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function deleteRaiyat(idx) {
-            if (confirm("क्या आप इस रैयत का सम्पूर्ण रिकॉर्ड हटाना चाहते हैं?")) {
+            if (confirm("क्या आप इस रैयत का सम्पूर्ण रिकॉर्ड व दस्तावेज हटाना चाहते हैं?")) {
+                const r = getCurrentProject().raiyats[idx];
+                if (r.documents) {
+                    r.documents.forEach(d => deleteDocBlob(d.id));
+                }
                 getCurrentProject().raiyats.splice(idx, 1);
                 saveDB();
             }
         }
 
-        // Party Form
+        // 📁 ULTRA-RELIABLE DOCUMENT UPLOAD ENGINE (INDEXED-DB)
+        async function handleFileUploadProcess(file, title, raiyatId) {
+            if (!file) throw new Error("कृपया कोई फाइल या फोटो चुनें!");
+            if (!title) throw new Error("कृपया दस्तावेज का नाम लिखें!");
+
+            const docId = 'doc_' + Date.now();
+            const proj = getCurrentProject();
+            const r = proj.raiyats.find(item => item.id === raiyatId);
+            if (!r) throw new Error("रैयत नहीं मिला!");
+
+            // Save raw file into IndexedDB
+            await saveDocBlob(docId, file, file.name, file.type);
+
+            if (!r.documents) r.documents = [];
+            r.documents.push({
+                id: docId,
+                title: title,
+                date: todayStr,
+                fileName: file.name,
+                fileType: file.type,
+                size: (file.size / 1024).toFixed(1) + ' KB'
+            });
+
+            saveDB();
+            return true;
+        }
+
+        async function openOrDownloadDoc(docId, fileName) {
+            try {
+                const docRecord = await getDocBlob(docId);
+                if (!docRecord || !docRecord.fileBlob) {
+                    alert('फाइल नहीं मिली!');
+                    return;
+                }
+                const url = URL.createObjectURL(docRecord.fileBlob);
+                const win = window.open(url, '_blank');
+                if (!win) {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName || docRecord.fileName || 'document';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                }
+            } catch(e) {
+                alert('दस्तावेज खोलने में त्रुटि: ' + e);
+            }
+        }
+
+        async function uploadModalRaiyatDoc() {
+            const { type, index } = currentModalContext;
+            if (type !== 'raiyat') return;
+
+            const title = document.getElementById('docTitleInput').value.trim();
+            const fileInput = document.getElementById('docFileInput');
+            const file = fileInput.files[0];
+            const r = getCurrentProject().raiyats[index];
+
+            try {
+                await handleFileUploadProcess(file, title, r.id);
+                document.getElementById('docTitleInput').value = '';
+                fileInput.value = '';
+                renderRaiyatDocs();
+                alert('✅ दस्तावेज सफलतापूर्वक सुरक्षित हो गया!');
+            } catch (err) {
+                alert('त्रुटि: ' + err.message);
+            }
+        }
+
+        async function uploadDirectVaultDoc() {
+            const rId = document.getElementById('vaultRaiyatSelect').value;
+            const title = document.getElementById('vaultDocTitle').value.trim();
+            const fileInput = document.getElementById('vaultDocFile');
+            const file = fileInput.files[0];
+
+            if (!rId) {
+                alert('कृपया पहले किसी रैयत को चुनें!');
+                return;
+            }
+
+            try {
+                await handleFileUploadProcess(file, title, rId);
+                document.getElementById('vaultDocTitle').value = '';
+                fileInput.value = '';
+                renderVaultSection();
+                alert('✅ दस्तावेज तिजोरी में सुरक्षित हो गया!');
+            } catch (err) {
+                alert('त्रुटि: ' + err.message);
+            }
+        }
+
+        function renderRaiyatDocs() {
+            const { type, index } = currentModalContext;
+            const container = document.getElementById('raiyatDocsContainer');
+            const docSection = document.getElementById('docUploadSection');
+
+            if (type !== 'raiyat') {
+                docSection.style.display = 'none';
+                return;
+            }
+            docSection.style.display = 'block';
+
+            const proj = getCurrentProject();
+            const r = proj.raiyats[index];
+            const docs = r.documents || [];
+
+            if (docs.length === 0) {
+                container.innerHTML = '<p style="font-size:11px; color:#64748b; margin-top:4px;">इस रैयत के लिए अभी कोई एग्रीमेंट/दस्तावेज अपलोड नहीं है।</p>';
+                return;
+            }
+
+            let html = '<div style="font-size:11px; font-weight:700; color:#334155; margin-bottom:4px;">अपलोड किए गए दस्तावेज:</div>';
+            docs.forEach((doc, dIdx) => {
+                html += `
+                    <div class="doc-item-card">
+                        <div>
+                            <b style="font-size:12px; color:var(--primary);">📄 ${doc.title}</b>
+                            <span style="font-size:10px; color:#64748b; margin-left:6px;">(${doc.date} | ${doc.size || ''})</span>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button type="button" class="btn btn-sm btn-purple" onclick="openOrDownloadDoc('${doc.id}', '${doc.fileName}')">👁️ देखें / डाउनलोड</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteRaiyatDocModal(${dIdx})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        async function deleteRaiyatDocModal(dIdx) {
+            if (!confirm("क्या आप यह दस्तावेज हटाना चाहते हैं?")) return;
+            const { type, index } = currentModalContext;
+            const proj = getCurrentProject();
+            const doc = proj.raiyats[index].documents[dIdx];
+            if (doc) await deleteDocBlob(doc.id);
+            proj.raiyats[index].documents.splice(dIdx, 1);
+            saveDB();
+            renderRaiyatDocs();
+            renderVaultSection();
+        }
+
+        // Render Dedicated Documents Vault Section
+        function renderVaultSection() {
+            const proj = getCurrentProject();
+            const select = document.getElementById('vaultRaiyatSelect');
+            select.innerHTML = '<option value="">-- रैयत चुनें --</option>';
+
+            (proj.raiyats || []).forEach(r => {
+                select.innerHTML += `<option value="${r.id}">${r.name} (प्लॉट: ${r.plot}, खाता: ${r.khata})</option>`;
+            });
+
+            const container = document.getElementById('allRaiyatsDocsList');
+            let hasAnyDoc = false;
+            let html = '';
+
+            (proj.raiyats || []).forEach(r => {
+                const docs = r.documents || [];
+                if (docs.length > 0) {
+                    hasAnyDoc = true;
+                    html += `
+                        <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px dashed var(--border); padding-bottom:6px;">
+                                <div>
+                                    <b style="font-size:13px; color:var(--primary);">${r.name}</b>
+                                    <span style="font-size:11px; color:#64748b; margin-left:6px;">(प्लॉट: ${r.plot} | खाता: ${r.khata})</span>
+                                </div>
+                                <span class="badge" style="background:#e0e7ff; color:var(--accent);">${docs.length} फाइलें</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:8px;">
+                    `;
+
+                    docs.forEach(doc => {
+                        html += `
+                            <div class="doc-item-card" style="margin-bottom:0;">
+                                <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:6px;">
+                                    <b style="font-size:11.5px; color:var(--primary); display:block; text-overflow:ellipsis; overflow:hidden;">📄 ${doc.title}</b>
+                                    <span style="font-size:10px; color:#64748b;">${doc.date} (${doc.size || ''})</span>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-purple" onclick="openOrDownloadDoc('${doc.id}', '${doc.fileName}')">👁️ खोलें</button>
+                            </div>
+                        `;
+                    });
+
+                    html += `</div></div>`;
+                }
+            });
+
+            if (!hasAnyDoc) {
+                container.innerHTML = '<p style="font-size:12px; color:#64748b; text-align:center; padding:20px;">अभी तक किसी भी रैयत का कोई दस्तावेज अपलोड नहीं हुआ है। ऊपर दिए गए फॉर्म से अपलोड करें।</p>';
+            } else {
+                container.innerHTML = html;
+            }
+        }
+
+        // Party Management
         function addPartyPlotRow(plot = '', area = '', rate = '') {
             const container = document.getElementById('partyPlotsContainer');
             const div = document.createElement('div');
@@ -1075,6 +1586,7 @@
 
             document.getElementById('partySubmitBtn').innerText = "अपडेट करें";
             document.getElementById('cancelPartyEdit').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function deleteParty(idx) {
@@ -1084,7 +1596,7 @@
             }
         }
 
-        // Expenses Form
+        // Expenses Management
         document.getElementById('expenseForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const proj = getCurrentProject();
@@ -1131,6 +1643,7 @@
 
             document.getElementById('expenseSubmitBtn').innerText = "खर्च अपडेट करें";
             document.getElementById('cancelExpenseEdit').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function deleteExpense(idx) {
@@ -1140,7 +1653,7 @@
             }
         }
 
-        // Passbook & Transactions
+        // Passbook Modal Logic
         function openPassbook(type, index) {
             currentModalContext = { type, index };
             const proj = getCurrentProject();
@@ -1160,6 +1673,7 @@
 
             resetTxForm();
             renderPassbookModal();
+            renderRaiyatDocs();
             document.getElementById('passbookModal').style.display = 'flex';
         }
 
@@ -1318,6 +1832,263 @@
             renderPassbookModal();
         }
 
+        // PLOT FILTER & PDF REPORT GENERATOR
+        function updatePlotDropdown() {
+            const proj = getCurrentProject();
+            const select = document.getElementById('plotFilterSelect');
+            const currentSelected = select.value;
+
+            const plotSet = new Set();
+            (proj.raiyats || []).forEach(r => {
+                if (r.plot) plotSet.add(r.plot.toString().trim());
+            });
+            (proj.parties || []).forEach(p => {
+                if (p.plots && p.plots.length > 0) {
+                    p.plots.forEach(pl => {
+                        if (pl.plotNo) plotSet.add(pl.plotNo.toString().trim());
+                    });
+                }
+            });
+
+            const sortedPlots = Array.from(plotSet).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+
+            select.innerHTML = '<option value="">-- कोई प्लॉट चुनें --</option>';
+            sortedPlots.forEach(plotNo => {
+                select.innerHTML += `<option value="${plotNo}" ${plotNo === currentSelected ? 'selected' : ''}>प्लॉट नं: ${plotNo}</option>`;
+            });
+        }
+
+        function onPlotFilterChanged() {
+            const selectedPlot = document.getElementById('plotFilterSelect').value;
+            const reportDiv = document.getElementById('plotReportView');
+
+            if (!selectedPlot) {
+                reportDiv.style.display = 'none';
+                return;
+            }
+
+            const proj = getCurrentProject();
+            reportDiv.style.display = 'block';
+            document.getElementById('repPlotHeading').innerText = `प्लॉट नं. ${selectedPlot} - सम्पूर्ण विभाजन व ब्योरा`;
+            document.getElementById('repProjectHeading').innerText = `प्रोजेक्ट: ${proj.name} | मौजा: ${proj.mauja} (${proj.maujaNo})`;
+
+            // Match All Raiyats on this Plot
+            const rTbody = document.getElementById('plotRaiyatReportBody');
+            rTbody.innerHTML = '';
+            let rTot = 0, rPaid = 0, rArea = 0;
+
+            const matchedRaiyats = (proj.raiyats || []).filter(r => (r.plot || '').toString().trim() === selectedPlot);
+            if (matchedRaiyats.length === 0) {
+                rTbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#94a3b8;">इस प्लॉट में कोई रैयत दर्ज नहीं है।</td></tr>';
+            } else {
+                matchedRaiyats.forEach((r, idx) => {
+                    const total = r.area * r.rate;
+                    const paid = (r.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                    const due = total - paid;
+                    rArea += r.area;
+                    rTot += total;
+                    rPaid += paid;
+
+                    rTbody.innerHTML += `<tr>
+                        <td>${idx + 1}</td>
+                        <td><b>${r.khata}</b></td>
+                        <td><b>${r.name}</b></td>
+                        <td>${r.area} डिसमिल</td>
+                        <td>₹${r.rate.toLocaleString('en-IN')}</td>
+                        <td>₹${total.toLocaleString('en-IN')}</td>
+                        <td style="color:var(--success); font-weight:bold;">₹${paid.toLocaleString('en-IN')}</td>
+                        <td style="color:var(--danger); font-weight:bold;">₹${due.toLocaleString('en-IN')}</td>
+                    </tr>`;
+                });
+            }
+
+            // Match All Parties on this Plot
+            const pTbody = document.getElementById('plotPartyReportBody');
+            pTbody.innerHTML = '';
+            let pTot = 0, pRecv = 0, pArea = 0;
+
+            const matchedParties = [];
+            (proj.parties || []).forEach(p => {
+                if (p.plots && p.plots.length > 0) {
+                    const matchedPlots = p.plots.filter(pl => (pl.plotNo || '').toString().trim() === selectedPlot);
+                    if (matchedPlots.length > 0) {
+                        matchedPlots.forEach(mpl => {
+                            matchedParties.push({
+                                name: p.name,
+                                area: mpl.area,
+                                rate: mpl.rate,
+                                totalVal: mpl.area * mpl.rate,
+                                allRecv: (p.transactions || []).reduce((acc, t) => acc + t.amount, 0),
+                                partyTotalVal: getPartyTotalValue(p)
+                            });
+                        });
+                    }
+                }
+            });
+
+            if (matchedParties.length === 0) {
+                pTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8;">इस प्लॉट का कोई खरीदार (पार्टी) दर्ज नहीं है।</td></tr>';
+            } else {
+                matchedParties.forEach(mp => {
+                    const ratio = mp.partyTotalVal > 0 ? (mp.totalVal / mp.partyTotalVal) : 1;
+                    const plotReceived = Math.round(mp.allRecv * ratio);
+                    const plotDue = mp.totalVal - plotReceived;
+
+                    pArea += mp.area;
+                    pTot += mp.totalVal;
+                    pRecv += plotReceived;
+
+                    pTbody.innerHTML += `<tr>
+                        <td><b>${mp.name}</b></td>
+                        <td>${mp.area} डिसमिल</td>
+                        <td>₹${mp.rate.toLocaleString('en-IN')}</td>
+                        <td>₹${mp.totalVal.toLocaleString('en-IN')}</td>
+                        <td style="color:var(--success); font-weight:bold;">₹${plotReceived.toLocaleString('en-IN')}</td>
+                        <td style="color:var(--danger); font-weight:bold;">₹${plotDue.toLocaleString('en-IN')}</td>
+                    </tr>`;
+                });
+            }
+
+            document.getElementById('repPlotSummaryMeta').innerText = `रैयत कुल रकबा: ${rArea.toFixed(1)} डिसमिल | खरीदार रकबा: ${pArea.toFixed(1)} डिसमिल`;
+            document.getElementById('repRaiyatTotal').innerText = rTot.toLocaleString('en-IN');
+            document.getElementById('repRaiyatPaid').innerText = rPaid.toLocaleString('en-IN');
+            document.getElementById('repRaiyatDue').innerText = (rTot - rPaid).toLocaleString('en-IN');
+
+            document.getElementById('repPartyTotal').innerText = pTot.toLocaleString('en-IN');
+            document.getElementById('repPartyRecv').innerText = pRecv.toLocaleString('en-IN');
+            document.getElementById('repPartyDue').innerText = (pTot - pRecv).toLocaleString('en-IN');
+        }
+
+        // PRINT HANDLERS
+        function executeCleanPrint(htmlContent) {
+            const printContainer = document.getElementById('printMasterContent');
+            printContainer.innerHTML = htmlContent;
+            window.print();
+        }
+
+        function printPlotReport() {
+            const plotVal = document.getElementById('plotFilterSelect').value;
+            if (!plotVal) {
+                alert('कृपया पहले ड्रॉपडाउन से एक प्लॉट नंबर चुनें!');
+                return;
+            }
+            const content = document.getElementById('plotReportView').innerHTML;
+            executeCleanPrint(content);
+        }
+
+        function printSinglePassbook() {
+            const modalClone = document.getElementById('passbookModalContent').cloneNode(true);
+            const noPrintElements = modalClone.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.remove());
+            executeCleanPrint(modalClone.innerHTML);
+        }
+
+        function printFullList(type) {
+            const proj = getCurrentProject();
+            let html = '';
+
+            if (type === 'raiyat') {
+                html = `
+                    <div style="border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:12px;">
+                        <h2 style="font-size:18px;">सभी रैयतों (खाताधारक/विक्रेता) की सूची</h2>
+                        <p style="font-size:12px; color:#555;">प्रोजेक्ट: ${proj.name} | मौजा: ${proj.mauja} (${proj.maujaNo})</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>क्र.</th><th>तारीख</th><th>खाता</th><th>प्लॉट</th><th>रैयत नाम</th><th>रकबा</th><th>कुल रकम</th><th>दिया भुगतान</th><th>शेष बाकी</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                (proj.raiyats || []).forEach((r, idx) => {
+                    const total = r.area * r.rate;
+                    const paid = (r.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                    const due = total - paid;
+                    html += `
+                        <tr>
+                            <td>${idx + 1}</td><td>${r.date || '-'}</td><td>${r.khata}</td><td>${r.plot || '-'}</td><td><b>${r.name}</b></td>
+                            <td>${r.area} डिसमिल</td><td>₹${total.toLocaleString('en-IN')}</td><td>₹${paid.toLocaleString('en-IN')}</td><td>₹${due.toLocaleString('en-IN')}</td>
+                        </tr>
+                    `;
+                });
+                html += '</tbody></table>';
+            } else if (type === 'party') {
+                html = `
+                    <div style="border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:12px;">
+                        <h2 style="font-size:18px;">सभी पार्टी (खरीदार) की सूची</h2>
+                        <p style="font-size:12px; color:#555;">प्रोजेक्ट: ${proj.name} | मौजा: ${proj.mauja} (${proj.maujaNo})</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>क्र.</th><th>तारीख</th><th>पार्टी नाम</th><th>प्लॉट, रकबा & रेट</th><th>कुल रकबा</th><th>कुल तय मूल्य</th><th>कुल प्राप्त</th><th>शेष बाकी</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                (proj.parties || []).forEach((p, idx) => {
+                    const total = getPartyTotalValue(p);
+                    const totalArea = getPartyTotalArea(p);
+                    const recv = (p.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                    const due = total - recv;
+                    let plotBadges = (p.plots || []).map(pl => `Plt ${pl.plotNo} (${pl.area}d @ ₹${pl.rate})`).join(', ');
+
+                    html += `
+                        <tr>
+                            <td>${idx + 1}</td><td>${p.date || '-'}</td><td><b>${p.name}</b></td><td>${plotBadges || '-'}</td>
+                            <td>${totalArea.toFixed(1)} डिसमिल</td><td>₹${total.toLocaleString('en-IN')}</td><td>₹${recv.toLocaleString('en-IN')}</td><td>₹${due.toLocaleString('en-IN')}</td>
+                        </tr>
+                    `;
+                });
+                html += '</tbody></table>';
+            }
+
+            executeCleanPrint(html);
+        }
+
+        function printFullProjectSummary() {
+            const proj = getCurrentProject();
+            let totalAreaDismil = 0, totalRaiyatCost = 0, totalRaiyatPaid = 0;
+            (proj.raiyats || []).forEach(r => {
+                totalAreaDismil += r.area;
+                totalRaiyatCost += (r.area * r.rate);
+                totalRaiyatPaid += (r.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+            });
+
+            let totalPartySale = 0, totalPartyRecv = 0;
+            (proj.parties || []).forEach(p => {
+                totalPartySale += getPartyTotalValue(p);
+                totalPartyRecv += (p.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+            });
+
+            let totalExp = (proj.expenses || []).reduce((acc, e) => acc + e.amount, 0);
+
+            const html = `
+                <div style="border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:14px;">
+                    <h2 style="font-size:20px;">लैंड एग्रीगेशन ERP - संपूर्ण प्रोजेक्ट रिपोर्ट</h2>
+                    <p style="font-size:12px; color:#555;">प्रोजेक्ट: <b>${proj.name}</b> | मौजा: <b>${proj.mauja}</b> (${proj.maujaNo}) | लक्ष्य: <b>${proj.targetAcre} एकड़</b></p>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                    <div style="border:1px solid #ccc; padding:10px; border-radius:6px;">
+                        <h4>रैयत स्थिति (खरीद):</h4>
+                        <p>कुल अधिग्रहित रकबा: <b>${totalAreaDismil.toFixed(1)} डिसमिल</b></p>
+                        <p>रैयतों की कुल तय रकम: <b>₹${totalRaiyatCost.toLocaleString('en-IN')}</b></p>
+                        <p>कुल दिया गया भुगतान: <b>₹${totalRaiyatPaid.toLocaleString('en-IN')}</b></p>
+                        <p>रैयतों का शेष बकाया: <b style="color:red;">₹${(totalRaiyatCost - totalRaiyatPaid).toLocaleString('en-IN')}</b></p>
+                    </div>
+                    <div style="border:1px solid #ccc; padding:10px; border-radius:6px;">
+                        <h4>पार्टी स्थिति (बिक्री व खर्चे):</h4>
+                        <p>कुल तय बिक्री मूल्य: <b>₹${totalPartySale.toLocaleString('en-IN')}</b></p>
+                        <p>पार्टी से प्राप्त रकम: <b>₹${totalPartyRecv.toLocaleString('en-IN')}</b></p>
+                        <p>पार्टी से शेष लेना: <b style="color:green;">₹${(totalPartySale - totalPartyRecv).toLocaleString('en-IN')}</b></p>
+                        <p>कुल कमीशन व अन्य खर्च: <b>₹${totalExp.toLocaleString('en-IN')}</b></p>
+                    </div>
+                </div>
+            `;
+            executeCleanPrint(html);
+        }
+
         // Render Everything
         function renderAll() {
             const proj = getCurrentProject();
@@ -1329,15 +2100,6 @@
                 sel.innerHTML += `<option value="${p.id}" ${p.id === db.currentProjectId ? 'selected' : ''}>${p.name} (${p.mauja})</option>`;
             });
 
-            const mapPanel = document.getElementById('activeMapPanel');
-            const mapImg = document.getElementById('activeMapDisplay');
-            if (proj.mapImage) {
-                mapImg.src = proj.mapImage;
-                mapPanel.style.display = 'block';
-            } else {
-                mapPanel.style.display = 'none';
-            }
-
             // Raiyat Table
             const rBody = document.getElementById('raiyatTableBody');
             rBody.innerHTML = '';
@@ -1347,6 +2109,7 @@
                 const total = r.area * r.rate;
                 const paid = (r.transactions || []).reduce((acc, t) => acc + t.amount, 0);
                 const due = total - paid;
+                const docCount = (r.documents || []).length;
 
                 totalAreaDismil += r.area;
                 totalRaiyatCost += total;
@@ -1363,7 +2126,7 @@
                     <td style="color:var(--success); font-weight:bold;">₹${paid.toLocaleString('en-IN')}</td>
                     <td style="color:var(--danger); font-weight:bold;">₹${due.toLocaleString('en-IN')}</td>
                     <td>
-                        <button class="btn btn-sm btn-purple" onclick="openPassbook('raiyat', ${idx})">📖 पासबुक</button>
+                        <button class="btn btn-sm btn-purple" onclick="openPassbook('raiyat', ${idx})">📖 पासबुक ${docCount > 0 ? `📁 (${docCount})` : ''}</button>
                     </td>
                     <td>
                         <button class="btn btn-sm btn-warning" onclick="editRaiyat(${idx})">✏️</button>
@@ -1437,17 +2200,26 @@
                 </tr>`;
             });
 
-            // Dashboard
+            // Dashboard KPI
             document.getElementById('dashAcquired').innerText = `${totalAreaDismil.toFixed(1)} डिसमिल (${(totalAreaDismil/100).toFixed(2)} एकड़)`;
             document.getElementById('dashTotalReceived').innerText = `₹${totalPartyRecv.toLocaleString('en-IN')}`;
             document.getElementById('dashPartyStatus').innerText = `₹${(totalPartySale - totalPartyRecv).toLocaleString('en-IN')}`;
             document.getElementById('dashRaiyatPaid').innerText = `₹${totalRaiyatPaid.toLocaleString('en-IN')}`;
             document.getElementById('dashRaiyatDue').innerText = `₹${(totalRaiyatCost - totalRaiyatPaid).toLocaleString('en-IN')}`;
             document.getElementById('dashTotalExpenses').innerText = `₹${totalExpenses.toLocaleString('en-IN')}`;
+
+            updatePlotDropdown();
+            onPlotFilterChanged();
         }
 
-        resetPartyForm();
-        renderAll();
+        // Initialize App & DB
+        initIndexedDB().then(() => {
+            resetPartyForm();
+            renderAll();
+        }).catch(() => {
+            resetPartyForm();
+            renderAll();
+        });
     </script>
 </body>
 </html>
