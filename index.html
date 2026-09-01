@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Land Aggregation & Deal Ledger ERP</title>
+    <title>Land Aggregation & Deal Ledger ERP (Pro Suite)</title>
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -37,6 +39,41 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
         body { background: #f1f5f9; color: var(--text-main); padding: 12px; }
+
+        /* 🔒 SECURITY PIN LOCK OVERLAY */
+        #pinLockOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(9, 13, 22, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .pin-box {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+        }
+
+        .pin-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 24px;
+            letter-spacing: 10px;
+            text-align: center;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            margin: 14px 0;
+            outline: none;
+        }
 
         .app-header {
             background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);
@@ -82,7 +119,7 @@
             margin-bottom: 12px;
         }
 
-        /* 🔘 TAB NAVIGATION SYSTEM */
+        /* 🔘 TAB NAVIGATION */
         .tab-navigation {
             display: flex;
             gap: 6px;
@@ -95,9 +132,9 @@
         .tab-btn {
             background: white;
             border: 1px solid var(--border);
-            padding: 9px 16px;
+            padding: 9px 14px;
             border-radius: 8px 8px 0 0;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
@@ -105,14 +142,10 @@
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
-        .tab-btn:hover {
-            color: var(--accent);
-            background: #fafcff;
-        }
-
+        .tab-btn:hover { color: var(--accent); background: #fafcff; }
         .tab-btn.active {
             background: var(--accent);
             color: white;
@@ -120,14 +153,8 @@
             box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.2s ease-in-out;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; animation: fadeIn 0.2s ease-in-out; }
+        .tab-content.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(3px); }
@@ -143,13 +170,13 @@
 
         @media (min-width: 768px) {
             body { padding: 18px; max-width: 1420px; margin: 0 auto; }
-            .dashboard-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; }
+            .dashboard-grid { grid-template-columns: repeat(7, 1fr); gap: 10px; }
             .app-header h1 { font-size: 1.5rem; }
         }
 
         .stat-card {
             background: var(--surface);
-            padding: 14px;
+            padding: 12px 14px;
             border-radius: var(--radius-md);
             border: 1px solid var(--border);
             box-shadow: var(--shadow-card);
@@ -160,21 +187,15 @@
             justify-content: space-between;
         }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--accent);
-        }
-
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
         .stat-card.green::before { background: var(--success); }
         .stat-card.red::before { background: var(--danger); }
         .stat-card.purple::before { background: var(--purple); }
         .stat-card.orange::before { background: var(--warning); }
+        .stat-card.emerald::before { background: #047857; }
 
-        .stat-label { font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 15px; font-weight: 800; margin-top: 6px; color: var(--text-main); }
+        .stat-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 14px; font-weight: 800; margin-top: 5px; color: var(--text-main); }
 
         .panel {
             background: var(--surface);
@@ -205,16 +226,12 @@
             margin-bottom: 12px;
         }
 
-        @media (min-width: 640px) {
-            .form-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (min-width: 960px) {
-            .form-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
-        }
+        @media (min-width: 640px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 960px) { .form-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); } }
 
         .form-group { display: flex; flex-direction: column; }
         .form-group label { font-size: 11px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             padding: 8px 11px;
             border: 1px solid var(--border);
             border-radius: 7px;
@@ -226,7 +243,7 @@
             transition: all 0.15s ease;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
@@ -287,6 +304,10 @@
 
         .badge-plot { background: var(--accent-soft); color: var(--accent); margin: 1px; }
 
+        .status-available { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+        .status-token { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
+        .status-sold { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
         .modal {
             display: none;
             position: fixed;
@@ -311,36 +332,33 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
         }
 
-        .doc-item-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 12px;
-            background: #fff;
-            border: 1px solid var(--border);
+        .map-wrapper {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .map-preview-img {
+            max-width: 100%;
+            max-height: 480px;
             border-radius: 8px;
-            margin-bottom: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            object-fit: contain;
+            cursor: zoom-in;
+            background: #fff;
         }
 
         /* 🖨️ ROBUST PRINT SYSTEM */
-        #printMasterContainer {
-            display: none;
-        }
+        #printMasterContainer { display: none; }
 
         @media print {
-            body {
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            body > *:not(#printMasterContainer) {
-                display: none !important;
-            }
+            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+            body > *:not(#printMasterContainer) { display: none !important; }
             #printMasterContainer {
                 display: block !important;
                 width: 100% !important;
-                padding: 20px !important;
+                padding: 25px !important;
                 background: white !important;
                 color: #000 !important;
             }
@@ -367,17 +385,31 @@
 </head>
 <body>
 
+    <!-- 🔒 1. PIN LOCK OVERLAY -->
+    <div id="pinLockOverlay">
+        <div class="pin-box">
+            <h3 style="font-size: 16px; margin-bottom: 4px;">🔒 ERP सुरक्षा लॉक</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">कृपया 4-अंकों का सिक्योरिटी पिन दर्ज करें</p>
+            <input type="password" id="appPinInput" class="pin-input" maxlength="4" placeholder="••••" autofocus onkeyup="if(event.key==='Enter') unlockApp()">
+            <button class="btn btn-green" style="width:100%;" onclick="unlockApp()">अनब्लॉक करें</button>
+            <p style="font-size: 11px; color: #94a3b8; margin-top: 10px;">डिफ़ॉल्ट पिन: <b>1234</b></p>
+        </div>
+    </div>
+
+    <!-- Header -->
     <header class="app-header no-print">
         <div>
             <h1>लैंड एग्रीगेशन & डील लेज़र ERP</h1>
-            <p>रैयत खाता, एग्रीमेंट तिजोरी, प्लॉट विभाजन & पासबुक सिस्टम</p>
+            <p>रैयत खाता, मास्टर नक्शा, एग्रीमेंट ड्राफ्ट, प्लॉट इन्वेंटरी & लाइव पासबुक</p>
         </div>
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <button class="btn btn-sm btn-ghost" style="color:white; border-color:rgba(255,255,255,0.3);" onclick="exportDataBackup()">📥 बैकअप (Export)</button>
+            <button class="btn btn-sm btn-green" onclick="exportDataToExcelCSV()">📊 Excel (CSV) डाउनलोड</button>
+            <button class="btn btn-sm btn-ghost" style="color:white; border-color:rgba(255,255,255,0.3);" onclick="exportDataBackup()">📥 बैकअप (JSON)</button>
             <label class="btn btn-sm btn-ghost" style="color:white; border-color:rgba(255,255,255,0.3); cursor:pointer;">
-                📤 अपलोड (Import)
+                📤 अपलोड
                 <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importDataBackup(event)">
             </label>
+            <button class="btn btn-sm btn-ghost" style="color:white; border-color:rgba(255,255,255,0.3);" onclick="changeAppPin()">🔑 पिन बदलें</button>
             <div id="syncStatus" class="sync-pill">🔄 कनेक्ट हो रहा है...</div>
         </div>
     </header>
@@ -388,25 +420,29 @@
             <select id="activeProjectSelect" onchange="switchProject()"></select>
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top: auto;">
-            <button class="btn btn-warning btn-sm" onclick="openEditCurrentProject()">✏️ प्रोजेक्ट एडिट</button>
+            <button class="btn btn-warning btn-sm" onclick="openEditCurrentProject()">✏️ प्रोजेक्ट एडिट / नक्शा बदलें</button>
             <button class="btn btn-sm" onclick="openNewProjectPanel()">+ नया प्रोजेक्ट</button>
             <button class="btn btn-danger btn-sm" onclick="deleteCurrentProject()">🗑️ हटाएं</button>
         </div>
     </div>
 
+    <!-- 🔘 TAB BUTTONS BAR -->
     <div class="tab-navigation no-print">
-        <button class="tab-btn active" onclick="switchSection('tabDashboard', this)">📊 डैशबोर्ड & समरी</button>
+        <button class="tab-btn active" onclick="switchSection('tabDashboard', this)">📊 डैशबोर्ड & नक्शा</button>
+        <button class="tab-btn" onclick="switchSection('tabPlotStatus', this)">📍 4. प्लॉट स्टेटस इन्वेंटरी</button>
         <button class="tab-btn" onclick="switchSection('tabPlotReport', this)">🔍 प्लॉट-वार रिपोर्ट</button>
+        <button class="tab-btn" onclick="switchSection('tabAgreementGen', this)">📜 5. ऑटो-एग्रीमेंट / बयाना</button>
         <button class="tab-btn" onclick="switchSection('tabRaiyat', this)">🌾 1. रैयत (विक्रेता) लेज़र</button>
         <button class="tab-btn" onclick="switchSection('tabParty', this)">🏢 2. पार्टी (खरीदार) लेज़र</button>
         <button class="tab-btn" onclick="switchSection('tabExpenses', this)">💸 3. खर्चे & कमीशन</button>
-        <button class="tab-btn" onclick="switchSection('tabDocsVault', this)">📁 4. एग्रीमेंट / दस्तावेज तिजोरी</button>
+        <button class="tab-btn" onclick="switchSection('tabDocsVault', this)">📁 दस्तावेज तिजोरी</button>
     </div>
 
+    <!-- ================= SECTION 1: DASHBOARD ================= -->
     <div id="tabDashboard" class="tab-content active no-print">
         <section class="dashboard-grid">
             <div class="stat-card">
-                <span class="stat-label">कुल रकबा (Acquired)</span>
+                <span class="stat-label">कुल रकबा</span>
                 <span class="stat-value" id="dashAcquired">0 डिसमिल</span>
             </div>
             <div class="stat-card green">
@@ -422,26 +458,68 @@
                 <span class="stat-value" id="dashTotalExpenses" style="color:var(--purple);">₹0</span>
             </div>
             <div class="stat-card red">
-                <span class="stat-label">रैयतों का शेष बकाया</span>
+                <span class="stat-label">रैयतों का शेष बाकी</span>
                 <span class="stat-value" id="dashRaiyatDue" style="color:var(--danger);">₹0</span>
             </div>
             <div class="stat-card green">
                 <span class="stat-label">पार्टी से शेष बाकी</span>
                 <span class="stat-value" id="dashPartyStatus" style="color:var(--success);">₹0</span>
             </div>
+            <div class="stat-card emerald">
+                <span class="stat-label">शुद्ध मुनाफ़ा (Net Profit)</span>
+                <span class="stat-value" id="dashNetProfit" style="color:#047857;">₹0</span>
+            </div>
         </section>
 
-        <div class="panel">
+        <!-- Master Map -->
+        <div class="panel" id="activeMapPanel">
             <div class="panel-header">
-                <span class="panel-title">📌 प्रोजेक्ट का संक्षिप्त हाल</span>
-                <button class="btn btn-purple btn-sm" onclick="printFullProjectSummary()">🖨️ संपूर्ण प्रोजेक्ट रिपोर्ट PDF</button>
+                <span class="panel-title">🗺️ प्रोजेक्ट मास्टर नक्शा / लेआउट प्लान</span>
+                <div style="display:flex; gap:6px;">
+                    <button class="btn btn-warning btn-sm" onclick="openEditCurrentProject()">✏️ नया नक्शा अपलोड करें</button>
+                    <button class="btn btn-purple btn-sm" onclick="printFullProjectSummary()">🖨️ सम्पूर्ण रिपोर्ट PDF</button>
+                </div>
             </div>
-            <p style="font-size:13px; color:var(--text-muted); line-height: 1.6;">
-                ऊपर दिए गए टैब्स का इस्तेमाल करके आप रैयत, खरीदार, खर्चे और उनके एग्रीमेंट पेपर्स को अलग-अलग आसानी से मैनेज कर सकते हैं।
-            </p>
+            <div class="map-wrapper" id="mapWrapperDiv">
+                <img id="activeMapDisplay" class="map-preview-img" src="" alt="नक्शा" onclick="openFullMap(this.src)" style="display:none;">
+                <div id="noMapPlaceholder" style="padding:40px 10px; color:#64748b;">
+                    <p style="font-size:32px; margin-bottom:8px;">🗺️</p>
+                    <p style="font-weight:700;">इस प्रोजेक्ट का नक्शा अभी अपलोड नहीं हुआ है।</p>
+                    <button class="btn btn-sm btn-accent" style="margin-top:10px;" onclick="openEditCurrentProject()">+ यहाँ क्लिक करके नक्शा फोटो अपलोड करें</button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- ================= SECTION 2: 📍 PLOT INVENTORY ================= -->
+    <div id="tabPlotStatus" class="tab-content no-print">
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📍 प्लॉट इन्वेंटरी & कलर स्टेटस ट्रैकर</span>
+                <div style="display:flex; gap:8px; font-size:11px;">
+                    <span class="badge status-available">🟢 उपलब्ध</span>
+                    <span class="badge status-token">🟡 बयाना/टोकन</span>
+                    <span class="badge status-sold">🔴 सोल्ड/रजिस्ट्री</span>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>प्लॉट नं.</th>
+                            <th>रैयत का नाम</th>
+                            <th>कुल रकबा</th>
+                            <th>खरीदार पार्टी</th>
+                            <th>वर्तमान स्थिति (Status)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plotStatusTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SECTION 3: PLOT REPORT ================= -->
     <div id="tabPlotReport" class="tab-content no-print">
         <section class="panel" style="border: 2px solid var(--accent); background: #f8faff;">
             <div class="panel-header">
@@ -458,9 +536,6 @@
                         <option value="">-- कोई प्लॉट चुनें --</option>
                     </select>
                 </div>
-                <div style="font-size: 12px; color: var(--text-muted); padding-bottom: 8px;">
-                    (प्लॉट चुनते ही इस प्लॉट के सभी रैयत, हिस्सा, खरीदार और बकाया अलग-अलग दिखेंगे)
-                </div>
             </div>
 
             <div id="plotReportView" style="margin-top: 14px; display: none;">
@@ -472,36 +547,24 @@
                     <div style="text-align: right; font-size: 12px; font-weight: bold; color: var(--accent);" id="repPlotSummaryMeta"></div>
                 </div>
 
-                <h4 style="font-size: 13px; color: var(--primary); margin-bottom: 6px;">1. इस प्लॉट के सभी रैयत (खाताधारक/विक्रेता):</h4>
+                <h4 style="font-size: 13px; color: var(--primary); margin-bottom: 6px;">1. इस प्लॉट के सभी रैयत:</h4>
                 <div class="table-wrap" style="margin-bottom: 14px;">
                     <table>
                         <thead>
                             <tr>
-                                <th>क्र.</th>
-                                <th>खाता नं.</th>
-                                <th>रैयत का नाम</th>
-                                <th>हिस्सा (डिसमिल)</th>
-                                <th>तय रेट (₹)</th>
-                                <th>कुल तय रकम (₹)</th>
-                                <th>प्राप्त/दिया भुगतान (₹)</th>
-                                <th>शेष बकाया (₹)</th>
+                                <th>क्र.</th><th>खाता नं.</th><th>रैयत का नाम</th><th>हिस्सा (डिसमिल)</th><th>तय रेट (₹)</th><th>कुल रकम (₹)</th><th>प्राप्त भुगतान (₹)</th><th>शेष बकाया (₹)</th>
                             </tr>
                         </thead>
                         <tbody id="plotRaiyatReportBody"></tbody>
                     </table>
                 </div>
 
-                <h4 style="font-size: 13px; color: var(--primary); margin-bottom: 6px;">2. इस प्लॉट के खरीदार (पार्टी/ग्राहक):</h4>
+                <h4 style="font-size: 13px; color: var(--primary); margin-bottom: 6px;">2. इस प्लॉट के खरीदार:</h4>
                 <div class="table-wrap" style="margin-bottom: 14px;">
                     <table>
                         <thead>
                             <tr>
-                                <th>पार्टी का नाम</th>
-                                <th>खरीदा रकबा (डिसमिल)</th>
-                                <th>तय रेट (₹)</th>
-                                <th>कुल तय मूल्य (₹)</th>
-                                <th>प्राप्त भुगतान (₹)</th>
-                                <th>शेष बकाया (₹)</th>
+                                <th>पार्टी का नाम</th><th>खरीदा रकबा (डिसमिल)</th><th>तय रेट (₹)</th><th>कुल मूल्य (₹)</th><th>प्राप्त भुगतान (₹)</th><th>शेष बकाया (₹)</th>
                             </tr>
                         </thead>
                         <tbody id="plotPartyReportBody"></tbody>
@@ -516,6 +579,53 @@
         </section>
     </div>
 
+    <!-- ================= SECTION 4: 📜 5. कस्टमाइज़ेबल ऑटो-एग्रीमेंट ड्राफ्ट जनरेटर ================= -->
+    <div id="tabAgreementGen" class="tab-content no-print">
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📜 5. जमीन बयाना / इकरारनामा ड्राफ्ट (Agreement Generator)</span>
+                <button class="btn btn-purple btn-sm" onclick="printAgreementDraft()">🖨️ एग्रीमेंट प्रिंट / PDF</button>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>एग्रीमेंट का प्रकार:</label>
+                    <select id="agrType" onchange="setupAgreementGenerator()">
+                        <option value="seller">रैयत (विक्रेता) के साथ बयाना / एग्रीमेंट</option>
+                        <option value="buyer">खरीदार (पार्टी) के साथ बिक्री एग्रीमेंट</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="agrPersonLabel">प्रथम पक्ष (रैयत/विक्रेता) चुनें:</label>
+                    <select id="agrPersonSelect" onchange="generateAgreementPreview()"></select>
+                </div>
+                <!-- कस्टमाइज़ेबल द्वितीय पक्ष (Buyer / Aggregator Name) -->
+                <div class="form-group" style="grid-column: span 2;">
+                    <label style="color:var(--accent); font-weight:700;">✍️ द्वितीय पक्ष का नाम, पिता/कंपनी & पता (Editable):</label>
+                    <input type="text" id="agrSecondParty" value="" placeholder="उदा. श्री राहुल कुमार, पिता- श्री संजय सिंह, साकिन- शास्त्री नगर, पटना" oninput="generateAgreementPreview()">
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>चौहद्दी (पूरब, पश्चिम, उत्तर, दक्षिण):</label>
+                    <input type="text" id="agrChauhaddi" placeholder="उदा. पूरब- 20 फीट रास्ता, पश्चिम- सुरेश यादव, उत्तर- निज, दक्षिण- नाला" oninput="generateAgreementPreview()">
+                </div>
+                <div class="form-group">
+                    <label>रजिस्ट्री / पूर्ण भुगतान की अंतिम तिथि:</label>
+                    <input type="date" id="agrValidDate" onchange="generateAgreementPreview()">
+                </div>
+                <div class="form-group">
+                    <label>स्थान / शहर का नाम:</label>
+                    <input type="text" id="agrPlace" value="पटना" placeholder="उदा. रांची / पटना" oninput="generateAgreementPreview()">
+                </div>
+            </div>
+
+            <!-- Printable Legal Agreement Stamp Box -->
+            <div style="background:#fff; border:2px solid #0f172a; padding:30px; border-radius:8px; margin-top:16px; line-height:1.9; font-size:13.5px; color:#111;" id="agreementPreviewBox">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= SECTION 5: RAIYAT ================= -->
     <div id="tabRaiyat" class="tab-content no-print">
         <section class="panel">
             <div class="panel-header">
@@ -564,17 +674,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>क्र.</th>
-                            <th>तारीख</th>
-                            <th>खाता</th>
-                            <th>प्लॉट</th>
-                            <th>रैयत नाम</th>
-                            <th>रकबा</th>
-                            <th>कुल रकम</th>
-                            <th>दिया भुगतान</th>
-                            <th>शेष बाकी</th>
-                            <th>पासबुक & एग्रीमेंट</th>
-                            <th>एक्शन</th>
+                            <th>क्र.</th><th>तारीख</th><th>खाता</th><th>प्लॉट</th><th>रैयत नाम</th><th>रकबा</th><th>कुल रकम</th><th>दिया भुगतान</th><th>शेष बाकी</th><th>पासबुक & एग्रीमेंट</th><th>एक्शन</th>
                         </tr>
                     </thead>
                     <tbody id="raiyatTableBody"></tbody>
@@ -583,6 +683,7 @@
         </section>
     </div>
 
+    <!-- ================= SECTION 6: PARTY ================= -->
     <div id="tabParty" class="tab-content no-print">
         <section class="panel">
             <div class="panel-header">
@@ -627,15 +728,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>तारीख</th>
-                            <th>पार्टी नाम</th>
-                            <th>प्लॉट, रकबा & रेट</th>
-                            <th>कुल रकबा</th>
-                            <th>कुल तय मूल्य</th>
-                            <th>कुल प्राप्त</th>
-                            <th>शेष बाकी</th>
-                            <th>पासबुक</th>
-                            <th>एक्शन</th>
+                            <th>तारीख</th><th>पार्टी नाम</th><th>प्लॉट, रकबा & रेट</th><th>कुल रकबा</th><th>कुल तय मूल्य</th><th>कुल प्राप्त</th><th>शेष बाकी</th><th>पासबुक</th><th>एक्शन</th>
                         </tr>
                     </thead>
                     <tbody id="partyTableBody"></tbody>
@@ -644,6 +737,7 @@
         </section>
     </div>
 
+    <!-- ================= SECTION 7: EXPENSES ================= -->
     <div id="tabExpenses" class="tab-content no-print">
         <section class="panel" style="border-top: 3px solid var(--purple);">
             <div class="panel-header">
@@ -697,14 +791,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>क्र.</th>
-                            <th>तारीख</th>
-                            <th>श्रेणी</th>
-                            <th>प्राप्तकर्ता</th>
-                            <th>रकम (₹)</th>
-                            <th>माध्यम</th>
-                            <th>विवरण</th>
-                            <th>एक्शन</th>
+                            <th>क्र.</th><th>तारीख</th><th>श्रेणी</th><th>प्राप्तकर्ता</th><th>रकम (₹)</th><th>माध्यम</th><th>विवरण</th><th>एक्शन</th>
                         </tr>
                     </thead>
                     <tbody id="expenseTableBody"></tbody>
@@ -713,11 +800,11 @@
         </section>
     </div>
 
+    <!-- ================= SECTION 8: DOCS VAULT ================= -->
     <div id="tabDocsVault" class="tab-content no-print">
         <section class="panel" style="border: 2px solid var(--success);">
             <div class="panel-header">
                 <span class="panel-title" style="color:var(--success);">📁 4. सभी रैयतों के एग्रीमेंट, रजिस्ट्री व दस्तावेज तिजोरी</span>
-                <span style="font-size:12px; color:var(--text-muted);">IndexedDB Safe Storage (Zero Error Upload)</span>
             </div>
 
             <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:14px; border-radius:8px; margin-bottom:14px;">
@@ -729,7 +816,7 @@
                     </div>
                     <div class="form-group">
                         <label>दस्तावेज का शीर्षक (Title)</label>
-                        <input type="text" id="vaultDocTitle" placeholder="उदा. एग्रीमेंट पेपर / रजिस्ट्री कॉपी / रसीद">
+                        <input type="text" id="vaultDocTitle" placeholder="उदा. एग्रीमेंट पेपर / रजिस्ट्री कॉपी">
                     </div>
                     <div class="form-group">
                         <label>फाइल / फोटो चुनें (PDF या Image):</label>
@@ -743,9 +830,10 @@
         </section>
     </div>
 
+    <!-- Project Edit Panel Modal -->
     <div class="panel no-print" id="projectPanel" style="display:none; background: #eff6ff; border: 1px solid #bfdbfe;">
         <div class="panel-header">
-            <span class="panel-title" id="projectPanelTitle">नया प्रोजेक्ट सेटअप & नक्शा</span>
+            <span class="panel-title" id="projectPanelTitle">प्रोजेक्ट सेटअप & मास्टर नक्शा</span>
         </div>
         <form id="projectForm">
             <input type="hidden" id="editProjId" value="">
@@ -768,7 +856,7 @@
                     <input type="number" id="projTargetAcre" step="any" required placeholder="20">
                 </div>
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>🗺️ मास्टर नक्शा फोटो:</label>
+                    <label style="color:var(--accent); font-weight:bold;">🗺️ प्रोजेक्ट मास्टर लेआउट नक्शा फोटो अपलोड करें:</label>
                     <input type="file" id="projMapInput" accept="image/*">
                 </div>
             </div>
@@ -779,6 +867,7 @@
         </form>
     </div>
 
+    <!-- Passbook Modal -->
     <div class="modal" id="passbookModal">
         <div class="modal-content" id="passbookModalContent">
             <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:12px;">
@@ -828,28 +917,18 @@
             <div class="no-print" id="docUploadSection" style="background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px; margin-bottom:12px;">
                 <h4 style="font-size:12px; font-weight:700; color:var(--success); margin-bottom:6px;">📁 रैयत एग्रीमेंट / रजिस्ट्री दस्तावेज जोड़ें:</h4>
                 <div style="display:grid; grid-template-columns:1fr 1.5fr auto; gap:8px; align-items:center;">
-                    <input type="text" id="docTitleInput" placeholder="दस्तावेज का नाम (उदा. एग्रीमेंट पेपर)" style="padding:7px; font-size:12px; border:1px solid var(--border); border-radius:6px;">
+                    <input type="text" id="docTitleInput" placeholder="दस्तावेज का नाम" style="padding:7px; font-size:12px; border:1px solid var(--border); border-radius:6px;">
                     <input type="file" id="docFileInput" accept="image/*,.pdf" style="font-size:11px;">
                     <button type="button" class="btn btn-green btn-sm" onclick="uploadModalRaiyatDoc()">+ अपलोड करें</button>
                 </div>
                 <div id="raiyatDocsContainer" style="margin-top:10px;"></div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <h4 style="font-size:12px; font-weight:700;">लेन-देन इतिहास:</h4>
-                <span class="badge" style="background:#e2e8f0; color:#475569;">📅 Date Wise</span>
-            </div>
-
             <div class="table-wrap">
-                <table style="min-width: 100%;">
+                <table>
                     <thead>
                         <tr>
-                            <th>क्र.</th>
-                            <th>तारीख</th>
-                            <th>रकम (₹)</th>
-                            <th>माध्यम</th>
-                            <th>विवरण / संदर्भ</th>
-                            <th class="no-print">एक्शन</th>
+                            <th>क्र.</th><th>तारीख</th><th>रकम (₹)</th><th>माध्यम</th><th>विवरण</th><th class="no-print">एक्शन</th>
                         </tr>
                     </thead>
                     <tbody id="transactionTableBody"></tbody>
@@ -877,12 +956,43 @@
         </div>
     </div>
 
+    <!-- 🖨️ PRINT MASTER CONTAINER -->
     <div id="printMasterContainer">
         <div id="printMasterContent"></div>
     </div>
 
+    <!-- Application Script -->
     <script>
-        // 🗄️ INDEXED-DB ENGINE FOR UNLIMITED FAIL-PROOF FILE STORAGE
+        // 🔒 1. PIN LOCK LOGIC
+        let appSecurityPin = localStorage.getItem('land_erp_pin') || '1234';
+
+        function unlockApp() {
+            const entered = document.getElementById('appPinInput').value;
+            if (entered === appSecurityPin) {
+                document.getElementById('pinLockOverlay').style.display = 'none';
+            } else {
+                alert('गलत पिन! डिफ़ॉल्ट पिन 1234 है।');
+                document.getElementById('appPinInput').value = '';
+            }
+        }
+
+        function changeAppPin() {
+            const current = prompt('वर्तमान पिन दर्ज करें:');
+            if (current === appSecurityPin) {
+                const newPin = prompt('नया 4-अंकों का पिन दर्ज करें:');
+                if (newPin && newPin.length === 4) {
+                    appSecurityPin = newPin;
+                    localStorage.setItem('land_erp_pin', newPin);
+                    alert('✅ सिक्योरिटी पिन बदल दिया गया!');
+                } else {
+                    alert('पिन 4 अंकों का होना चाहिए!');
+                }
+            } else {
+                alert('गलत वर्तमान पिन!');
+            }
+        }
+
+        // IndexedDB
         let idb = null;
         function initIndexedDB() {
             return new Promise((resolve, reject) => {
@@ -893,14 +1003,8 @@
                         db.createObjectStore('documents', { keyPath: 'id' });
                     }
                 };
-                req.onsuccess = function(e) {
-                    idb = e.target.result;
-                    resolve(idb);
-                };
-                req.onerror = function(e) {
-                    console.error("IndexedDB Error:", e);
-                    reject(e);
-                };
+                req.onsuccess = function(e) { idb = e.target.result; resolve(idb); };
+                req.onerror = function(e) { reject(e); };
             });
         }
 
@@ -937,19 +1041,10 @@
             });
         }
 
-        // Local Storage Master Recovery
+        // Master Recovery
         function recoverMasterDatabase() {
-            const possibleKeys = [
-                'land_app_cloud_db_v8',
-                'land_app_cloud_db_v7',
-                'land_app_cloud_db_v6',
-                'land_passbook_db_v5',
-                'land_passbook_db_v4',
-                'land_app_cloud_db'
-            ];
-
-            let bestDb = null;
-            let maxItems = -1;
+            const possibleKeys = ['land_app_cloud_db_v8', 'land_app_cloud_db_v7', 'land_app_cloud_db_v6', 'land_passbook_db_v5', 'land_passbook_db_v4', 'land_app_cloud_db'];
+            let bestDb = null, maxItems = -1;
 
             for (let key of possibleKeys) {
                 try {
@@ -963,10 +1058,7 @@
                                 count += (p.parties ? p.parties.length : 0);
                                 count += (p.expenses ? p.expenses.length : 0);
                             });
-                            if (count > maxItems) {
-                                maxItems = count;
-                                bestDb = parsed;
-                            }
+                            if (count > maxItems) { maxItems = count; bestDb = parsed; }
                         }
                     }
                 } catch(e) {}
@@ -974,7 +1066,7 @@
 
             if (!bestDb) {
                 bestDb = {
-                    projects: [{ id: 'proj_1', name: 'रामपुर एग्रीगेशन', mauja: 'रामपुर', maujaNo: '', targetAcre: 20, mapImage: '', raiyats: [], parties: [], expenses: [] }],
+                    projects: [{ id: 'proj_1', name: 'रामपुर एग्रीगेशन', mauja: 'रामपुर', maujaNo: '', targetAcre: 20, mapImage: '', raiyats: [], parties: [], expenses: [], plotStatuses: {} }],
                     currentProjectId: 'proj_1'
                 };
             }
@@ -1005,7 +1097,6 @@
             document.getElementById('syncStatus').style.background = 'rgba(5, 150, 105, 0.2)';
             document.getElementById('syncStatus').style.color = '#10b981';
         } catch (e) {
-            console.warn("Firebase fallback", e);
             document.getElementById('syncStatus').innerText = '🟡 Local Mode Active';
         }
 
@@ -1013,10 +1104,10 @@
         document.getElementById('rDate').value = todayStr;
         document.getElementById('pDate').value = todayStr;
         document.getElementById('eDate').value = todayStr;
+        document.getElementById('agrValidDate').value = todayStr;
 
         let currentModalContext = { type: '', index: -1 };
 
-        // TAB SWITCHING FUNCTION
         function switchSection(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -1024,9 +1115,9 @@
             document.getElementById(tabId).classList.add('active');
             if (btnElement) btnElement.classList.add('active');
 
-            if (tabId === 'tabDocsVault') {
-                renderVaultSection();
-            }
+            if (tabId === 'tabDocsVault') renderVaultSection();
+            if (tabId === 'tabPlotStatus') renderPlotStatusInventory();
+            if (tabId === 'tabAgreementGen') setupAgreementGenerator();
         }
 
         if (isCloudAvailable) {
@@ -1036,14 +1127,10 @@
                     let cloudCount = 0, localCount = 0;
 
                     if (cloudData && cloudData.projects) {
-                        cloudData.projects.forEach(p => {
-                            cloudCount += (p.raiyats ? p.raiyats.length : 0) + (p.parties ? p.parties.length : 0);
-                        });
+                        cloudData.projects.forEach(p => { cloudCount += (p.raiyats ? p.raiyats.length : 0) + (p.parties ? p.parties.length : 0); });
                     }
                     if (db && db.projects) {
-                        db.projects.forEach(p => {
-                            localCount += (p.raiyats ? p.raiyats.length : 0) + (p.parties ? p.parties.length : 0);
-                        });
+                        db.projects.forEach(p => { localCount += (p.raiyats ? p.raiyats.length : 0) + (p.parties ? p.parties.length : 0); });
                     }
 
                     if (cloudCount >= localCount && cloudCount > 0) {
@@ -1056,9 +1143,7 @@
                 } else {
                     saveDB();
                 }
-            }, err => {
-                console.error("Firestore Error:", err);
-            });
+            }, err => { console.error("Firestore Error:", err); });
         }
 
         function saveLocalOnly() { localStorage.setItem('land_app_cloud_db_v8', JSON.stringify(db)); }
@@ -1066,14 +1151,50 @@
         function saveDB() {
             saveLocalOnly();
             if (isCloudAvailable) {
-                dbFirestore.collection('land_data').doc('master_ledger').set(db).catch(err => {
-                    console.error("Cloud Save error:", err);
-                });
+                dbFirestore.collection('land_data').doc('master_ledger').set(db).catch(err => console.error("Cloud Save error:", err));
             }
             renderAll();
         }
 
-        // Export / Import
+        // 📊 EXCEL (CSV) EXPORT
+        function exportDataToExcelCSV() {
+            const proj = getCurrentProject();
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+
+            csvContent += "=== 1. RAIYAT (SELLER) LEDGER ===\r\n";
+            csvContent += "Khata,Plot,Raiyat Name,Area (Dismil),Rate/Dismil,Total Amount,Paid,Due\r\n";
+            (proj.raiyats || []).forEach(r => {
+                const total = r.area * r.rate;
+                const paid = (r.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                const due = total - paid;
+                csvContent += `"${r.khata}","${r.plot}","${r.name}",${r.area},${r.rate},${total},${paid},${due}\r\n`;
+            });
+
+            csvContent += "\r\n=== 2. BUYER (PARTY) LEDGER ===\r\n";
+            csvContent += "Party Name,Total Area (Dismil),Total Sale Value,Received,Due\r\n";
+            (proj.parties || []).forEach(p => {
+                const totalVal = getPartyTotalValue(p);
+                const totalArea = getPartyTotalArea(p);
+                const recv = (p.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                const due = totalVal - recv;
+                csvContent += `"${p.name}",${totalArea},${totalVal},${recv},${due}\r\n`;
+            });
+
+            csvContent += "\r\n=== 3. EXPENSES (COMMISSION / MAPI) ===\r\n";
+            csvContent += "Date,Category,Person,Amount,Mode,Remarks\r\n";
+            (proj.expenses || []).forEach(e => {
+                csvContent += `"${e.date}","${e.category}","${e.person}",${e.amount},"${e.mode}","${e.remark || ''}"\r\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Project_${proj.name}_Full_Ledger_${todayStr}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
+
         function exportDataBackup() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
             const downloadAnchor = document.createElement('a');
@@ -1094,11 +1215,9 @@
                     if (imported && imported.projects) {
                         db = imported;
                         saveDB();
-                        alert('डेटा सफलतापूर्वक इम्पोर्ट हो गया!');
+                        alert('डेटा इम्पोर्ट हो गया!');
                     }
-                } catch(err) {
-                    alert('गलत फाइल फॉर्मेट!');
-                }
+                } catch(err) { alert('गलत फाइल फॉर्मेट!'); }
             };
             reader.readAsText(file);
         }
@@ -1110,6 +1229,7 @@
                 p = db.projects[0];
             }
             if (p && !p.expenses) p.expenses = [];
+            if (p && !p.plotStatuses) p.plotStatuses = {};
             return p;
         }
 
@@ -1121,6 +1241,7 @@
             document.getElementById('projectPanelTitle').innerText = 'नया प्रोजेक्ट सेटअप & नक्शा';
             document.getElementById('saveProjBtn').innerText = 'प्रोजेक्ट सुरक्षित करें';
             document.getElementById('projectPanel').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function openEditCurrentProject() {
@@ -1133,9 +1254,10 @@
             document.getElementById('projMaujaNo').value = p.maujaNo;
             document.getElementById('projTargetAcre').value = p.targetAcre;
 
-            document.getElementById('projectPanelTitle').innerText = 'प्रोजेक्ट का विवरण बदलें';
+            document.getElementById('projectPanelTitle').innerText = 'प्रोजेक्ट का विवरण बदलें / नया नक्शा अपलोड करें';
             document.getElementById('saveProjBtn').innerText = 'अपडेट करें';
             document.getElementById('projectPanel').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function closeProjectPanel() { document.getElementById('projectPanel').style.display = 'none'; }
@@ -1158,7 +1280,7 @@
                         p.mauja = mauja;
                         p.maujaNo = maujaNo;
                         p.targetAcre = targetAcre;
-                        if (mapDataUrl !== null) p.mapImage = mapDataUrl;
+                        if (mapDataUrl !== null && mapDataUrl !== undefined) p.mapImage = mapDataUrl;
                     }
                 } else {
                     const newProj = {
@@ -1167,13 +1289,15 @@
                         mapImage: mapDataUrl || '',
                         raiyats: [],
                         parties: [],
-                        expenses: []
+                        expenses: [],
+                        plotStatuses: {}
                     };
                     db.projects.push(newProj);
                     db.currentProjectId = newProj.id;
                 }
                 saveDB();
                 closeProjectPanel();
+                alert('✅ प्रोजेक्ट व नक्शा सुरक्षित हो गया!');
             };
 
             if (mapFile) {
@@ -1203,7 +1327,197 @@
             }
         }
 
-        // Raiyat Management
+        function openFullMap(src) {
+            if (src) {
+                const win = window.open('');
+                win.document.write(`<title>प्रोजेक्ट नक्शा</title><body style="margin:0;background:#111;display:flex;align-items:center;justify-content:center;height:100vh;"><img src="${src}" style="max-width:100%;max-height:100%;object-fit:contain;"></body>`);
+            }
+        }
+
+        // 📍 PLOT INVENTORY STATUS
+        function renderPlotStatusInventory() {
+            const proj = getCurrentProject();
+            const tbody = document.getElementById('plotStatusTableBody');
+            tbody.innerHTML = '';
+
+            const plotMap = {};
+            (proj.raiyats || []).forEach(r => {
+                const pNo = (r.plot || '').toString().trim();
+                if (pNo) {
+                    if (!plotMap[pNo]) plotMap[pNo] = { plotNo: pNo, raiyatNames: [], totalArea: 0, partyNames: [] };
+                    plotMap[pNo].raiyatNames.push(r.name);
+                    plotMap[pNo].totalArea += r.area;
+                }
+            });
+
+            (proj.parties || []).forEach(p => {
+                (p.plots || []).forEach(pl => {
+                    const pNo = (pl.plotNo || '').toString().trim();
+                    if (pNo) {
+                        if (!plotMap[pNo]) plotMap[pNo] = { plotNo: pNo, raiyatNames: [], totalArea: pl.area, partyNames: [] };
+                        plotMap[pNo].partyNames.push(p.name);
+                    }
+                });
+            });
+
+            const sortedPlots = Object.keys(plotMap).sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+
+            sortedPlots.forEach(pNo => {
+                const item = plotMap[pNo];
+                const currentStatus = (proj.plotStatuses || {})[pNo] || (item.partyNames.length > 0 ? 'sold' : 'available');
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>प्लॉट ${item.plotNo}</b></td>
+                        <td>${item.raiyatNames.join(', ') || '-'}</td>
+                        <td>${item.totalArea.toFixed(1)} डिसमिल</td>
+                        <td>${item.partyNames.join(', ') || '<span style="color:#94a3b8;">कोई नहीं</span>'}</td>
+                        <td>
+                            <select onchange="updatePlotStatus('${pNo}', this.value)" style="font-weight:700; border-radius:6px; padding:4px 8px;" class="status-${currentStatus}">
+                                <option value="available" ${currentStatus==='available'?'selected':''}>🟢 उपलब्ध</option>
+                                <option value="token" ${currentStatus==='token'?'selected':''}>🟡 बयाना / टोकन</option>
+                                <option value="sold" ${currentStatus==='sold'?'selected':''}>🔴 सोल्ड / रजिस्ट्री</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updatePlotStatus(plotNo, newStatus) {
+            const proj = getCurrentProject();
+            if (!proj.plotStatuses) proj.plotStatuses = {};
+            proj.plotStatuses[plotNo] = newStatus;
+            saveDB();
+            renderPlotStatusInventory();
+        }
+
+        // 📜 5. कस्टमाइज़ेबल ऑटो-एग्रीमेंट ड्राफ्ट जनरेटर
+        function setupAgreementGenerator() {
+            const proj = getCurrentProject();
+            const type = document.getElementById('agrType').value;
+            const select = document.getElementById('agrPersonSelect');
+            const label = document.getElementById('agrPersonLabel');
+            const secondPartyInput = document.getElementById('agrSecondParty');
+            select.innerHTML = '';
+
+            if (type === 'seller') {
+                label.innerText = 'प्रथम पक्ष (रैयत/विक्रेता) चुनें:';
+                if (!secondPartyInput.value || secondPartyInput.value.includes('बिल्डर्स')) {
+                    secondPartyInput.value = `${proj.name} (क्रेता / अधिकृत प्रतिनिधि)`;
+                }
+                (proj.raiyats || []).forEach(r => {
+                    select.innerHTML += `<option value="${r.id}">${r.name} (प्लॉट: ${r.plot}, खाता: ${r.khata})</option>`;
+                });
+            } else {
+                label.innerText = 'द्वितीय पक्ष (खरीदार/पार्टी) चुनें:';
+                if (!secondPartyInput.value || secondPartyInput.value.includes('अधिकृत प्रतिनिधि')) {
+                    secondPartyInput.value = `${proj.name} (डेवलपर / प्रथम पक्ष)`;
+                }
+                (proj.parties || []).forEach(p => {
+                    select.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+                });
+            }
+            generateAgreementPreview();
+        }
+
+        function generateAgreementPreview() {
+            const proj = getCurrentProject();
+            const type = document.getElementById('agrType').value;
+            const personId = document.getElementById('agrPersonSelect').value;
+            const secondPartyText = document.getElementById('agrSecondParty').value || 'अधिकृत क्रेता / डेवलपर';
+            const chauhaddi = document.getElementById('agrChauhaddi').value || 'पूरब: सड़क/रास्ता, पश्चिम: निज/अन्य, उत्तर: प्लॉट, दक्षिण: नाला/अन्य';
+            const validDate = document.getElementById('agrValidDate').value || todayStr;
+            const place = document.getElementById('agrPlace').value || 'स्थानीय';
+            const previewBox = document.getElementById('agreementPreviewBox');
+
+            if (!personId) {
+                previewBox.innerHTML = '<p style="color:#64748b;">कृपया पहले कोई व्यक्ति चुनें।</p>';
+                return;
+            }
+
+            let html = '';
+            if (type === 'seller') {
+                const r = proj.raiyats.find(item => item.id === personId);
+                if (!r) return;
+                const total = r.area * r.rate;
+                const paid = (r.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                const due = total - paid;
+
+                html = `
+                    <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:16px;">
+                        <h2 style="font-size:20px; font-weight:800; text-transform:uppercase;">जमीन खरीद बयाना इकरारनामा (Agreement To Sale)</h2>
+                        <p style="font-size:13px; color:#444;">मौजा: <b>${proj.mauja}</b> (थाना नं. ${proj.maujaNo}) | प्रोजेक्ट: <b>${proj.name}</b></p>
+                    </div>
+
+                    <p><b>प्रथम पक्ष (विक्रेता / रैयत):</b> श्री/श्रीमती <b>${r.name}</b>, खाता संख्या: <b>${r.khata}</b>, प्लॉट/खेसरा संख्या: <b>${r.plot}</b>, मौजा: <b>${proj.mauja}</b>।</p>
+                    <p><b>द्वितीय पक्ष (क्रेता / एग्रीगेटर):</b> <b>${secondPartyText}</b>।</p>
+                    <br>
+                    <p>जो कि प्रथम पक्ष अपनी रैयती स्वत्व व दखल-कब्जे की भूमि, जिसका विवरण नीचे दिया गया है, को पूर्ण रूप से भार-मुक्त व विवाद-मुक्त बताकर द्वितीय पक्ष के हाथ विक्रय करने हेतु पूर्ण सहमति प्रकट करते हैं:</p>
+                    
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:10px 14px; border-radius:6px; margin:10px 0;">
+                        <table style="width:100%; font-size:13px; border:none;">
+                            <tr><td style="border:none; padding:3px;"><b>कुल विक्रय रकबा:</b> ${r.area} डिसमिल</td><td style="border:none; padding:3px;"><b>तय दर (Rate):</b> ₹${r.rate.toLocaleString('en-IN')} प्रति डिसमिल</td></tr>
+                            <tr><td style="border:none; padding:3px;"><b>कुल तय सौदा मूल्य:</b> ₹${total.toLocaleString('en-IN')}</td><td style="border:none; padding:3px;"><b>प्राप्त बयाना / अग्रिम:</b> <span style="color:green; font-weight:bold;">₹${paid.toLocaleString('en-IN')}</span></td></tr>
+                            <tr><td colspan="2" style="border:none; padding:3px; border-top:1px dashed #cbd5e1;"><b>अंतिम शेष बकाया राशि:</b> <span style="color:red; font-weight:bold;">₹${due.toLocaleString('en-IN')}</span></td></tr>
+                        </table>
+                    </div>
+
+                    <p><b>1. भुगतान व रजिस्ट्री शर्त:</b> द्वितीय पक्ष द्वारा शेष बची रकम <b>₹${due.toLocaleString('en-IN')}</b> का भुगतान दिनांक <b>${validDate}</b> तक अथवा रजिस्ट्री के समय कर दिया जाएगा और प्रथम पक्ष निबंधित बैनामा (रजिस्ट्री) निष्पादित करने के लिए बाध्य होंगे।</p>
+                    <p><b>2. जमीन की चौहद्दी (Boundary):</b> ${chauhaddi}।</p>
+                    <p><b>3. साक्ष्य:</b> यह इकरारनामा दोनों पक्षों ने बिना किसी दबाव के, स्वस्थ चित्त में पढ़कर एवं समझकर गवाहों के समक्ष निष्पादित किया है।</p>
+                    <br><br>
+                    <div style="display:flex; justify-content:space-between; margin-top:40px; page-break-inside:avoid;">
+                        <div style="text-align:center;">___________________________<br><b>हस्ताक्षर प्रथम पक्ष (विक्रेता/रैयत)</b></div>
+                        <div style="text-align:center;">___________________________<br><b>हस्ताक्षर द्वितीय पक्ष (क्रेता)</b></div>
+                        <div style="text-align:center;">___________________________<br><b>गवाह 1 / गवाह 2</b></div>
+                    </div>
+                `;
+            } else {
+                const p = proj.parties.find(item => item.id === personId);
+                if (!p) return;
+                const totalVal = getPartyTotalValue(p);
+                const totalArea = getPartyTotalArea(p);
+                const recv = (p.transactions || []).reduce((acc, t) => acc + t.amount, 0);
+                const due = totalVal - recv;
+
+                html = `
+                    <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:16px;">
+                        <h2 style="font-size:20px; font-weight:800; text-transform:uppercase;">प्लॉट आवंटन व बिक्री सहमति पत्र (Sale Agreement)</h2>
+                        <p style="font-size:13px; color:#444;">प्रोजेक्ट: <b>${proj.name}</b> | मौजा: <b>${proj.mauja}</b></p>
+                    </div>
+
+                    <p><b>प्रथम पक्ष (डेवलपर / विक्रेता):</b> <b>${secondPartyText}</b>।</p>
+                    <p><b>द्वितीय पक्ष (आवंटी / खरीदार):</b> श्री/श्रीमती/मैसर्स <b>${p.name}</b>।</p>
+                    <br>
+                    <p>प्रथम पक्ष द्वारा द्वितीय पक्ष को उपरोक्त प्रोजेक्ट में कुल रकबा <b>${totalArea.toFixed(1)} डिसमिल</b> का प्लॉट आवंटित किया जाता है, जिसका विवरण निम्नवत है:</p>
+
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:10px 14px; border-radius:6px; margin:10px 0;">
+                        <table style="width:100%; font-size:13px; border:none;">
+                            <tr><td style="border:none; padding:3px;"><b>कुल आवंटित रकबा:</b> ${totalArea.toFixed(1)} डिसमिल</td><td style="border:none; padding:3px;"><b>कुल तय बिक्री मूल्य:</b> ₹${totalVal.toLocaleString('en-IN')}</td></tr>
+                            <tr><td style="border:none; padding:3px;"><b>प्राप्त अग्रिम / बुकिंग:</b> <span style="color:green; font-weight:bold;">₹${recv.toLocaleString('en-IN')}</span></td><td style="border:none; padding:3px;"><b>शेष देय राशि:</b> <span style="color:red; font-weight:bold;">₹${due.toLocaleString('en-IN')}</span></td></tr>
+                        </table>
+                    </div>
+
+                    <p><b>शर्तें:</b> द्वितीय पक्ष द्वारा शेष राशि का भुगतान दिनांक <b>${validDate}</b> तक पूर्ण कर दिया जाएगा। भुगतान पूर्ण होने पर प्रथम पक्ष रजिस्ट्री निष्पादित करेंगे।</p>
+                    <p><b>चौहद्दी व स्थल स्थिति:</b> ${chauhaddi}।</p>
+                    <br><br>
+                    <div style="display:flex; justify-content:space-between; margin-top:40px; page-break-inside:avoid;">
+                        <div style="text-align:center;">___________________________<br><b>अधिकृत हस्ताक्षर (प्रथम पक्ष)</b></div>
+                        <div style="text-align:center;">___________________________<br><b>हस्ताक्षर (द्वितीय पक्ष/खरीदार)</b></div>
+                        <div style="text-align:center;">___________________________<br><b>गवाह के हस्ताक्षर</b></div>
+                    </div>
+                `;
+            }
+            previewBox.innerHTML = html;
+        }
+
+        function printAgreementDraft() {
+            const content = document.getElementById('agreementPreviewBox').innerHTML;
+            executeCleanPrint(content);
+        }
+
+        // Raiyat Handlers
         document.getElementById('raiyatForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const proj = getCurrentProject();
@@ -1275,15 +1589,13 @@
         function deleteRaiyat(idx) {
             if (confirm("क्या आप इस रैयत का सम्पूर्ण रिकॉर्ड व दस्तावेज हटाना चाहते हैं?")) {
                 const r = getCurrentProject().raiyats[idx];
-                if (r.documents) {
-                    r.documents.forEach(d => deleteDocBlob(d.id));
-                }
+                if (r.documents) r.documents.forEach(d => deleteDocBlob(d.id));
                 getCurrentProject().raiyats.splice(idx, 1);
                 saveDB();
             }
         }
 
-        // 📁 ULTRA-RELIABLE DOCUMENT UPLOAD ENGINE (INDEXED-DB)
+        // Document Management
         async function handleFileUploadProcess(file, title, raiyatId) {
             if (!file) throw new Error("कृपया कोई फाइल या फोटो चुनें!");
             if (!title) throw new Error("कृपया दस्तावेज का नाम लिखें!");
@@ -1293,7 +1605,6 @@
             const r = proj.raiyats.find(item => item.id === raiyatId);
             if (!r) throw new Error("रैयत नहीं मिला!");
 
-            // Save raw file into IndexedDB
             await saveDocBlob(docId, file, file.name, file.type);
 
             if (!r.documents) r.documents = [];
@@ -1313,10 +1624,7 @@
         async function openOrDownloadDoc(docId, fileName) {
             try {
                 const docRecord = await getDocBlob(docId);
-                if (!docRecord || !docRecord.fileBlob) {
-                    alert('फाइल नहीं मिली!');
-                    return;
-                }
+                if (!docRecord || !docRecord.fileBlob) { alert('फाइल नहीं मिली!'); return; }
                 const url = URL.createObjectURL(docRecord.fileBlob);
                 const win = window.open(url, '_blank');
                 if (!win) {
@@ -1327,9 +1635,7 @@
                     a.click();
                     a.remove();
                 }
-            } catch(e) {
-                alert('दस्तावेज खोलने में त्रुटि: ' + e);
-            }
+            } catch(e) { alert('दस्तावेज खोलने में त्रुटि: ' + e); }
         }
 
         async function uploadModalRaiyatDoc() {
@@ -1346,10 +1652,8 @@
                 document.getElementById('docTitleInput').value = '';
                 fileInput.value = '';
                 renderRaiyatDocs();
-                alert('✅ दस्तावेज सफलतापूर्वक सुरक्षित हो गया!');
-            } catch (err) {
-                alert('त्रुटि: ' + err.message);
-            }
+                alert('✅ दस्तावेज सुरक्षित हो गया!');
+            } catch (err) { alert('त्रुटि: ' + err.message); }
         }
 
         async function uploadDirectVaultDoc() {
@@ -1358,10 +1662,7 @@
             const fileInput = document.getElementById('vaultDocFile');
             const file = fileInput.files[0];
 
-            if (!rId) {
-                alert('कृपया पहले किसी रैयत को चुनें!');
-                return;
-            }
+            if (!rId) { alert('कृपया पहले किसी रैयत को चुनें!'); return; }
 
             try {
                 await handleFileUploadProcess(file, title, rId);
@@ -1369,9 +1670,7 @@
                 fileInput.value = '';
                 renderVaultSection();
                 alert('✅ दस्तावेज तिजोरी में सुरक्षित हो गया!');
-            } catch (err) {
-                alert('त्रुटि: ' + err.message);
-            }
+            } catch (err) { alert('त्रुटि: ' + err.message); }
         }
 
         function renderRaiyatDocs() {
@@ -1379,10 +1678,7 @@
             const container = document.getElementById('raiyatDocsContainer');
             const docSection = document.getElementById('docUploadSection');
 
-            if (type !== 'raiyat') {
-                docSection.style.display = 'none';
-                return;
-            }
+            if (type !== 'raiyat') { docSection.style.display = 'none'; return; }
             docSection.style.display = 'block';
 
             const proj = getCurrentProject();
@@ -1424,7 +1720,6 @@
             renderVaultSection();
         }
 
-        // Render Dedicated Documents Vault Section
         function renderVaultSection() {
             const proj = getCurrentProject();
             const select = document.getElementById('vaultRaiyatSelect');
@@ -1471,13 +1766,13 @@
             });
 
             if (!hasAnyDoc) {
-                container.innerHTML = '<p style="font-size:12px; color:#64748b; text-align:center; padding:20px;">अभी तक किसी भी रैयत का कोई दस्तावेज अपलोड नहीं हुआ है। ऊपर दिए गए फॉर्म से अपलोड करें।</p>';
+                container.innerHTML = '<p style="font-size:12px; color:#64748b; text-align:center; padding:20px;">अभी तक किसी भी रैयत का कोई दस्तावेज अपलोड नहीं हुआ है।</p>';
             } else {
                 container.innerHTML = html;
             }
         }
 
-        // Party Management
+        // Party Handlers
         function addPartyPlotRow(plot = '', area = '', rate = '') {
             const container = document.getElementById('partyPlotsContainer');
             const div = document.createElement('div');
@@ -1513,10 +1808,7 @@
             const recv = parseFloat(document.getElementById('pReceived').value) || 0;
 
             const plotRows = document.querySelectorAll('#partyPlotsContainer .plot-item-row');
-            if (plotRows.length === 0) {
-                alert('कम से कम एक प्लॉट और उसका रेट जोड़ें!');
-                return;
-            }
+            if (plotRows.length === 0) { alert('कम से कम एक प्लॉट और उसका रेट जोड़ें!'); return; }
 
             const plots = [];
             plotRows.forEach(r => {
@@ -1596,7 +1888,7 @@
             }
         }
 
-        // Expenses Management
+        // Expenses Handlers
         document.getElementById('expenseForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const proj = getCurrentProject();
@@ -1677,9 +1969,7 @@
             document.getElementById('passbookModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('passbookModal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('passbookModal').style.display = 'none'; }
 
         function resetTxForm() {
             document.getElementById('tDate').value = todayStr;
@@ -1761,10 +2051,7 @@
             const remark = document.getElementById('tRemark').value.trim();
             const targetRaiyatId = document.getElementById('tTargetRaiyatId').value;
 
-            if (!amount || amount <= 0) {
-                alert('कृपया सही रकम दर्ज करें!');
-                return;
-            }
+            if (!amount || amount <= 0) { alert('कृपया सही रकम दर्ज करें!'); return; }
 
             const proj = getCurrentProject();
             const { type, index } = currentModalContext;
@@ -1832,22 +2119,16 @@
             renderPassbookModal();
         }
 
-        // PLOT FILTER & PDF REPORT GENERATOR
+        // Plot Report Handlers
         function updatePlotDropdown() {
             const proj = getCurrentProject();
             const select = document.getElementById('plotFilterSelect');
             const currentSelected = select.value;
 
             const plotSet = new Set();
-            (proj.raiyats || []).forEach(r => {
-                if (r.plot) plotSet.add(r.plot.toString().trim());
-            });
+            (proj.raiyats || []).forEach(r => { if (r.plot) plotSet.add(r.plot.toString().trim()); });
             (proj.parties || []).forEach(p => {
-                if (p.plots && p.plots.length > 0) {
-                    p.plots.forEach(pl => {
-                        if (pl.plotNo) plotSet.add(pl.plotNo.toString().trim());
-                    });
-                }
+                (p.plots || []).forEach(pl => { if (pl.plotNo) plotSet.add(pl.plotNo.toString().trim()); });
             });
 
             const sortedPlots = Array.from(plotSet).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
@@ -1862,17 +2143,13 @@
             const selectedPlot = document.getElementById('plotFilterSelect').value;
             const reportDiv = document.getElementById('plotReportView');
 
-            if (!selectedPlot) {
-                reportDiv.style.display = 'none';
-                return;
-            }
+            if (!selectedPlot) { reportDiv.style.display = 'none'; return; }
 
             const proj = getCurrentProject();
             reportDiv.style.display = 'block';
             document.getElementById('repPlotHeading').innerText = `प्लॉट नं. ${selectedPlot} - सम्पूर्ण विभाजन व ब्योरा`;
             document.getElementById('repProjectHeading').innerText = `प्रोजेक्ट: ${proj.name} | मौजा: ${proj.mauja} (${proj.maujaNo})`;
 
-            // Match All Raiyats on this Plot
             const rTbody = document.getElementById('plotRaiyatReportBody');
             rTbody.innerHTML = '';
             let rTot = 0, rPaid = 0, rArea = 0;
@@ -1902,28 +2179,24 @@
                 });
             }
 
-            // Match All Parties on this Plot
             const pTbody = document.getElementById('plotPartyReportBody');
             pTbody.innerHTML = '';
             let pTot = 0, pRecv = 0, pArea = 0;
 
             const matchedParties = [];
             (proj.parties || []).forEach(p => {
-                if (p.plots && p.plots.length > 0) {
-                    const matchedPlots = p.plots.filter(pl => (pl.plotNo || '').toString().trim() === selectedPlot);
-                    if (matchedPlots.length > 0) {
-                        matchedPlots.forEach(mpl => {
-                            matchedParties.push({
-                                name: p.name,
-                                area: mpl.area,
-                                rate: mpl.rate,
-                                totalVal: mpl.area * mpl.rate,
-                                allRecv: (p.transactions || []).reduce((acc, t) => acc + t.amount, 0),
-                                partyTotalVal: getPartyTotalValue(p)
-                            });
+                (p.plots || []).forEach(pl => {
+                    if ((pl.plotNo || '').toString().trim() === selectedPlot) {
+                        matchedParties.push({
+                            name: p.name,
+                            area: pl.area,
+                            rate: pl.rate,
+                            totalVal: pl.area * pl.rate,
+                            allRecv: (p.transactions || []).reduce((acc, t) => acc + t.amount, 0),
+                            partyTotalVal: getPartyTotalValue(p)
                         });
                     }
-                }
+                });
             });
 
             if (matchedParties.length === 0) {
@@ -1959,7 +2232,7 @@
             document.getElementById('repPartyDue').innerText = (pTot - pRecv).toLocaleString('en-IN');
         }
 
-        // PRINT HANDLERS
+        // Print Handlers
         function executeCleanPrint(htmlContent) {
             const printContainer = document.getElementById('printMasterContent');
             printContainer.innerHTML = htmlContent;
@@ -1968,10 +2241,7 @@
 
         function printPlotReport() {
             const plotVal = document.getElementById('plotFilterSelect').value;
-            if (!plotVal) {
-                alert('कृपया पहले ड्रॉपडाउन से एक प्लॉट नंबर चुनें!');
-                return;
-            }
+            if (!plotVal) { alert('कृपया पहले ड्रॉपडाउन से एक प्लॉट नंबर चुनें!'); return; }
             const content = document.getElementById('plotReportView').innerHTML;
             executeCleanPrint(content);
         }
@@ -2063,6 +2333,7 @@
             });
 
             let totalExp = (proj.expenses || []).reduce((acc, e) => acc + e.amount, 0);
+            let netProfit = totalPartySale - totalRaiyatCost - totalExp;
 
             const html = `
                 <div style="border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:14px;">
@@ -2083,6 +2354,7 @@
                         <p>पार्टी से प्राप्त रकम: <b>₹${totalPartyRecv.toLocaleString('en-IN')}</b></p>
                         <p>पार्टी से शेष लेना: <b style="color:green;">₹${(totalPartySale - totalPartyRecv).toLocaleString('en-IN')}</b></p>
                         <p>कुल कमीशन व अन्य खर्च: <b>₹${totalExp.toLocaleString('en-IN')}</b></p>
+                        <p style="margin-top:8px; border-top:1px dashed #666; padding-top:4px;">शुद्ध मुनाफ़ा (Net Profit): <b style="color:#047857; font-size:15px;">₹${netProfit.toLocaleString('en-IN')}</b></p>
                     </div>
                 </div>
             `;
@@ -2099,6 +2371,18 @@
             db.projects.forEach(p => {
                 sel.innerHTML += `<option value="${p.id}" ${p.id === db.currentProjectId ? 'selected' : ''}>${p.name} (${p.mauja})</option>`;
             });
+
+            // Master Map Rendering
+            const mapImg = document.getElementById('activeMapDisplay');
+            const noMapPlaceholder = document.getElementById('noMapPlaceholder');
+            if (proj.mapImage && proj.mapImage.trim() !== '') {
+                mapImg.src = proj.mapImage;
+                mapImg.style.display = 'inline-block';
+                noMapPlaceholder.style.display = 'none';
+            } else {
+                mapImg.style.display = 'none';
+                noMapPlaceholder.style.display = 'block';
+            }
 
             // Raiyat Table
             const rBody = document.getElementById('raiyatTableBody');
@@ -2149,17 +2433,12 @@
                 totalPartySale += total;
                 totalPartyRecv += recv;
 
-                let plotBadges = '';
-                if (p.plots && p.plots.length > 0) {
-                    plotBadges = p.plots.map(pl => `<span class="badge badge-plot">Plt ${pl.plotNo}: ${pl.area}dis @ ₹${pl.rate.toLocaleString('en-IN')}</span>`).join(' ');
-                } else {
-                    plotBadges = `${p.area} डिसमिल @ ₹${p.rate.toLocaleString('en-IN')}`;
-                }
+                let plotBadges = (p.plots || []).map(pl => `<span class="badge badge-plot">Plt ${pl.plotNo}: ${pl.area}dis @ ₹${pl.rate.toLocaleString('en-IN')}</span>`).join(' ');
 
                 pBody.innerHTML += `<tr>
                     <td>${p.date || '-'}</td>
                     <td><b>${p.name}</b></td>
-                    <td>${plotBadges}</td>
+                    <td>${plotBadges || '-'}</td>
                     <td><b>${totalArea.toFixed(1)}</b> डिसमिल</td>
                     <td>₹${total.toLocaleString('en-IN')}</td>
                     <td style="color:var(--success); font-weight:bold;">₹${recv.toLocaleString('en-IN')}</td>
@@ -2200,6 +2479,9 @@
                 </tr>`;
             });
 
+            // 💰 Net Profit
+            let netProfit = totalPartySale - totalRaiyatCost - totalExpenses;
+
             // Dashboard KPI
             document.getElementById('dashAcquired').innerText = `${totalAreaDismil.toFixed(1)} डिसमिल (${(totalAreaDismil/100).toFixed(2)} एकड़)`;
             document.getElementById('dashTotalReceived').innerText = `₹${totalPartyRecv.toLocaleString('en-IN')}`;
@@ -2207,12 +2489,13 @@
             document.getElementById('dashRaiyatPaid').innerText = `₹${totalRaiyatPaid.toLocaleString('en-IN')}`;
             document.getElementById('dashRaiyatDue').innerText = `₹${(totalRaiyatCost - totalRaiyatPaid).toLocaleString('en-IN')}`;
             document.getElementById('dashTotalExpenses').innerText = `₹${totalExpenses.toLocaleString('en-IN')}`;
+            document.getElementById('dashNetProfit').innerText = `₹${netProfit.toLocaleString('en-IN')}`;
 
             updatePlotDropdown();
             onPlotFilterChanged();
         }
 
-        // Initialize App & DB
+        // Init Engine
         initIndexedDB().then(() => {
             resetPartyForm();
             renderAll();
