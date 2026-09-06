@@ -1012,7 +1012,7 @@
 
                 <div class="form-group" style="grid-column: 1 / -1;">
                     <label style="color:var(--accent); font-weight:bold;">🗺️ प्रोजेक्ट मास्टर लेआउट नक्शा फोटो अपलोड करें:</label>
-                    <input type="file" id="projMapInput" accept="image/*,.pdf,application/pdf">
+                    <input type="file" id="projMapInput" accept="image/*">
                 </div>
             </div>
             <div style="display:flex; gap:8px;">
@@ -1261,7 +1261,7 @@
 
             if (!bestDb) {
                 bestDb = {
-                    projects: [{ id: 'proj_1', name: 'barbad dokania (barbad)', mauja: 'बड़बाद', maujaNo: 'मौजा नं. 285', targetAcre: 20, mapImage: '', raiyats: [], parties: [], expenses: [], plotStatuses: {} }],
+                    projects: [{ id: 'proj_1', name: 'barbad 20ac (barbad)', mauja: 'बड़बाद', maujaNo: 'मौजा नं. 285', targetAcre: 20, mapImage: '', raiyats: [], parties: [], expenses: [], plotStatuses: {} }],
                     currentProjectId: 'proj_1'
                 };
             }
@@ -1314,30 +1314,22 @@
             if (tabId === 'tabAgreementGen') setupAgreementGenerator();
         }
 
+        // ✅ स्नैपशॉट लिसनर: बिना रुकावट के दोनों तरफ तुरंत सिंक करेगा
         if (isCloudAvailable) {
             dbFirestore.collection('land_data').doc('master_ledger').onSnapshot(doc => {
                 if (doc.exists) {
                     const cloudData = doc.data();
-                    let cloudCount = 0, localCount = 0;
-
                     if (cloudData && cloudData.projects) {
-                        cloudData.projects.forEach(p => { cloudCount += (p.raiyats ? p.raiyats.length : 0) + (p.parties ? p.parties.length : 0); });
-                    }
-                    if (db && db.projects) {
-                        db.projects.forEach(p => { localCount += (p.raiyats ? p.raiyats.length : 0) + (p.parties ? p.parties.length : 0); });
-                    }
-
-                    if (cloudCount >= localCount && cloudCount > 0) {
                         db = cloudData;
                         saveLocalOnly();
                         renderAll();
-                    } else if (localCount > 0 && cloudCount === 0) {
-                        saveDB();
                     }
                 } else {
                     saveDB();
                 }
-            }, err => { console.error("Firestore Error:", err); });
+            }, err => { 
+                console.error("Firestore Error:", err); 
+            });
         }
 
         function saveLocalOnly() { 
@@ -1345,10 +1337,22 @@
             localStorage.setItem('land_app_cloud_db_v7', JSON.stringify(db));
         }
 
+        // ✅ saveDB: एरर होने पर तुरंत स्क्रीन पर पॉपअप देगा
         function saveDB() {
             saveLocalOnly();
             if (isCloudAvailable) {
-                dbFirestore.collection('land_data').doc('master_ledger').set(db).catch(err => console.error("Cloud Save error:", err));
+                dbFirestore.collection('land_data').doc('master_ledger').set(db)
+                    .then(() => {
+                        const pill = document.getElementById('syncStatus');
+                        if (pill) {
+                            pill.innerText = '🟢 सिंक हो गया';
+                            setTimeout(() => { pill.innerText = '🟢 Firebase Live Sync Active'; }, 2000);
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Cloud Save error:", err);
+                        alert("⚠️ सिंक एरर (डेटा सेव नहीं हुआ): " + err.message + "\n\nकारण: फोटो या नक्शा 1MB से बड़ा हो गया है।");
+                    });
             }
             renderAll();
         }
@@ -1437,6 +1441,7 @@
 
         function closeProjectPanel() { document.getElementById('projectPanel').style.display = 'none'; }
 
+        // ✅ कंप्रेसर: फोटो को 800px और 0.35 क्वालिटी पर ऑटोमैटिक 100 KB के अंदर रखेगा
         function compressImage(file, maxWidth, maxHeight, quality) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -1465,7 +1470,7 @@
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        resolve(canvas.toDataURL('image/jpeg', quality));
+                        resolve(canvas.toDataURL('image/jpeg', 0.35));
                     };
                 };
             });
@@ -1483,7 +1488,7 @@
 
             let mapDataUrl = existingMap;
             if (mapFile) {
-                mapDataUrl = await compressImage(mapFile, 1200, 1200, 0.7);
+                mapDataUrl = await compressImage(mapFile, 800, 800, 0.35);
             }
 
             if (editId) {
@@ -1945,7 +1950,6 @@
             previewBox.innerHTML = html;
         }
 
-        // 📜 शुद्ध एग्रीमेंट प्रिंट (बिना कंपनी लेटरहेड या लोगो के)
         function printAgreementDraft() {
             const content = document.getElementById('agreementPreviewBox').innerHTML;
             const printContainer = document.getElementById('printMasterContent');
